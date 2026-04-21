@@ -1,0 +1,10 @@
+.your-surveys {
+  &__title {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--color-accent);
+    text-align: center;
+    padding: 48px 48px 32px;
+  }
+}

@@ -1,0 +1,8 @@
+<section class="ending-soon">
+  <h2 class="ending-soon__title">Ending soon surveys</h2>
+  <div class="ending-soon__grid">
+    @for (survey of surveys(); track survey.id) {
+      <app-highlight-card [survey]="survey" (cardClick)="cardClick.emit($event)" />
+    }
+  </div>
+</section>

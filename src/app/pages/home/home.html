@@ -1,4 +1,8 @@
 <div class="container">
   <app-navbar theme="dark" />
   <app-hero />
+  <section class="your-surveys">
+    <h2 class="your-surveys__title">Your surveys</h2>
+    <app-ending-soon [surveys]="endingSoonSurveys" (cardClick)="onCardClick($event)" />
+  </section>
 </div>
