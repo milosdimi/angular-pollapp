@@ -1,0 +1,7 @@
+<article class="card" (click)="onClick()">
+  @if (survey().category) {
+    <span class="category">{{ survey().category }}</span>
+  }
+  <h3 class="title">{{ survey().title }}</h3>
+  <app-deadline-badge [endDate]="survey().end_date" />
+</article>
