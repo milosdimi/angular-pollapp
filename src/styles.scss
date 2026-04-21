@@ -1,8 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
-
 @font-face {
   font-family: 'Nerko One';
   src: url('./assets/fonts/NerkoOne-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+}
+
+:root {
+  /* Colors */
+  --color-bg-dark: #2d2040;
+  --color-bg-card-dark: #3a2d50;
+  --color-bg-card-light: #ffffff;
+  --color-bg-light: #f5f0ff;
+
+  --color-accent: #f5a623;
+  --color-accent-hover: #e09510;
+
+  --color-text-primary: #ffffff;
+  --color-text-dark: #2d2040;
+  --color-text-muted: #a89bbf;
+  --color-text-orange: #f5a623;
+
+  --color-badge-published: #f5a623;
+  --color-badge-draft: #a89bbf;
+
+  /* Typography */
+  --font-display: 'Nerko One', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-primary);
 }
