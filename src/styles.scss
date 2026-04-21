@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&display=swap');
+
 @font-face {
   font-family: 'Nerko One';
   src: url('./assets/fonts/NerkoOne-Regular.ttf') format('truetype');
@@ -12,20 +14,20 @@
   --color-bg-card-light: #ffffff;
   --color-bg-light: #f5f0ff;
 
-  --color-accent: #f5a623;
-  --color-accent-hover: #e09510;
+  --color-accent: #ffb770;
+  --color-accent-hover: #ffcfa1;
 
   --color-text-primary: #ffffff;
   --color-text-dark: #2d2040;
   --color-text-muted: #a89bbf;
-  --color-text-orange: #f5a623;
+  --color-text-orange: #ffb770;
 
   --color-badge-published: #f5a623;
   --color-badge-draft: #a89bbf;
 
   /* Typography */
   --font-display: 'Nerko One', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: 'Mulish', sans-serif;
 
   /* Spacing */
   --radius-sm: 8px;
@@ -43,4 +45,10 @@ body {
   font-family: var(--font-body);
   background-color: var(--color-bg-dark);
   color: var(--color-text-primary);
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
 }
