@@ -1,9 +1,13 @@
 <article class="card" (click)="onClick()">
   <div class="content">
-    @if (survey().category) {
-      <span class="category">{{ survey().category }}</span>
-    }
-    <h3 class="title">{{ survey().title }}</h3>
-    <app-deadline-badge [endDate]="survey().end_date" />
+    <div class="text-group">
+      @if (survey().category) {
+        <span class="category">{{ survey().category }}</span>
+      }
+      <h3 class="title">{{ survey().title }}</h3>
+    </div>
+    <div class="badge-row">
+      <app-deadline-badge [endDate]="survey().end_date" />
+    </div>
   </div>
 </article>

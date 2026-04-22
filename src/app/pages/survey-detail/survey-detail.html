@@ -1,1 +1,79 @@
-<p>survey-detail works!</p>
+<div class="page">
+  <div class="page__inner">
+    <app-navbar theme="light" [showCreateButton]="true" (createClick)="onCreateClick()" />
+
+    <main class="layout">
+      <!-- Left panel -->
+      <section class="survey-panel">
+        <div class="survey-panel__top">
+          <span class="survey-panel__status">{{ survey().status | titlecase }}</span>
+          <div class="survey-panel__meta">
+            <span>Ends on {{ survey().end_date }}</span>
+            <span>Category: {{ survey().category }}</span>
+          </div>
+          <h1 class="survey-panel__title">{{ survey().title }}</h1>
+          @if (survey().description) {
+            <p class="survey-panel__desc">{{ survey().description }}</p>
+          }
+        </div>
+
+        <div class="survey-panel__questions">
+          @for (question of survey().questions; track question.id; let i = $index) {
+            <div class="question">
+              <h3 class="question__title">{{ i + 1 }}. {{ question.text }}</h3>
+              @if (question.allow_multiple) {
+                <p class="question__hint">More than one answers are possible.</p>
+              }
+              <ul class="question__answers">
+                @for (answer of question.answers; track answer.id; let j = $index) {
+                  <li class="question__answer">
+                    <input type="checkbox" [id]="'a-' + answer.id" />
+                    <label [for]="'a-' + answer.id">
+                      <strong>{{ LETTERS[j] }}.</strong> {{ answer.text }}
+                    </label>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+
+        <div class="survey-panel__footer">
+          <button class="complete-btn">Complete survey</button>
+        </div>
+      </section>
+
+      <!-- Right panel: results -->
+      <aside class="results-panel">
+        <h2 class="results-panel__title">
+          Survey results <span class="results-panel__live">LIVE</span>
+        </h2>
+
+        @if (hasResults()) {
+          @for (question of survey().questions; track question.id; let i = $index) {
+            <div class="result-block">
+              <h3 class="result-block__title">{{ i + 1 }}. {{ question.text }}</h3>
+              @for (answer of question.answers; track answer.id; let j = $index) {
+                <div class="result-bar">
+                  <span class="result-bar__letter">{{ LETTERS[j] }}</span>
+                  <div class="result-bar__track">
+                    <div
+                      class="result-bar__fill"
+                      [style.width.%]="percentage(answer, question)"
+                    ></div>
+                  </div>
+                  <span class="result-bar__pct">{{ percentage(answer, question) }}%</span>
+                </div>
+              }
+            </div>
+          }
+        } @else {
+          <p class="results-panel__empty">
+            Results will be shown here after participants complete the survey.
+          </p>
+          <p class="results-panel__no-answers">There are no answers yet.</p>
+        }
+      </aside>
+    </main>
+  </div>
+</div>

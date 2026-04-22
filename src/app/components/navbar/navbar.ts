@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -10,4 +10,6 @@ import { RouterLink } from '@angular/router';
 export class Navbar {
   /** 'dark' = orange logo (dark bg), 'light' = purple logo (light bg) */
   theme = input<'dark' | 'light'>('dark');
+  showCreateButton = input<boolean>(false);
+  createClick = output<void>();
 }

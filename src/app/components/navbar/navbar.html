@@ -5,4 +5,10 @@
       alt="Poll App Logo"
     />
   </a>
+  @if (showCreateButton()) {
+    <button class="navbar__create-btn" (click)="createClick.emit()">
+      <span>Create survey</span>
+      <img class="navbar__create-icon" src="icons/add_circle.png" alt="" />
+    </button>
+  }
 </nav>
