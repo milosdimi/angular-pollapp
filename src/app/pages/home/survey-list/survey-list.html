@@ -1,0 +1,53 @@
+<div class="survey-list">
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <div class="filter-bar__tabs">
+      <button
+        class="filter-bar__tab"
+        [class.filter-bar__tab--active]="activeTab() === 'active'"
+        (click)="setTab('active')"
+      >
+        Active survey
+      </button>
+      <button
+        class="filter-bar__tab"
+        [class.filter-bar__tab--active]="activeTab() === 'past'"
+        (click)="setTab('past')"
+      >
+        Past survey
+      </button>
+    </div>
+
+    <div class="filter-bar__sort">
+      <button class="sort__trigger" (click)="toggleDropdown()">
+        <span>{{ selectedCategory() ?? 'Sort by categories' }}</span>
+        <span class="sort__arrow" [class.sort__arrow--open]="dropdownOpen()">▼</span>
+      </button>
+      @if (dropdownOpen()) {
+        <ul class="sort__dropdown">
+          @if (selectedCategory()) {
+            <li class="sort__item" (click)="selectCategory(null)">All categories</li>
+          }
+          @for (cat of categories; track cat) {
+            <li
+              class="sort__item"
+              [class.sort__item--active]="selectedCategory() === cat"
+              (click)="selectCategory(cat)"
+            >
+              {{ cat }}
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+
+  <!-- Survey grid -->
+  <div class="survey-list__grid">
+    @for (survey of filteredSurveys(); track survey.id) {
+      <app-survey-card [survey]="survey" (cardClick)="cardClick.emit($event)" />
+    } @empty {
+      <p class="survey-list__empty">No surveys found.</p>
+    }
+  </div>
+</div>

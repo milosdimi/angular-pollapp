@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Navbar } from '../../components/navbar/navbar';
 import { Hero } from './hero/hero';
 import { EndingSoon } from './ending-soon/ending-soon';
+import { SurveyList } from './survey-list/survey-list';
+import { Footer } from '../../components/footer/footer';
 import { Survey } from '../../models/survey.interface';
 
 const MOCK_SURVEYS: Survey[] = [
@@ -28,7 +30,7 @@ const MOCK_SURVEYS: Survey[] = [
 
 @Component({
   selector: 'app-home',
-  imports: [Navbar, Hero, EndingSoon],
+  imports: [Navbar, Hero, EndingSoon, SurveyList, Footer],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

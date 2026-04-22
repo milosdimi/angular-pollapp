@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&family=Nokora:wght@400;700&display=swap');
 
 @font-face {
   font-family: 'Nerko One';
@@ -28,6 +28,7 @@
   /* Typography */
   --font-display: 'Nerko One', sans-serif;
   --font-body: 'Mulish', sans-serif;
+  --font-ui: 'Nokora', sans-serif;
 
   /* Spacing */
   --radius-sm: 8px;

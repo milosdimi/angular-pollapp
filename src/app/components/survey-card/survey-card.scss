@@ -1,11 +1,12 @@
 .card {
   background-color: var(--color-bg-card-dark);
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
+  border-radius: 5px 50px 5px 5px;
+  padding: 12px 20px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 127px;
   transition: opacity 0.2s ease;
 
   &:hover {
@@ -14,14 +15,23 @@
 }
 
 .category {
-  font-size: 0.75rem;
-  color: var(--color-text-orange);
+  font-family: var(--font-body);
+  font-size: 16px;
   font-weight: 500;
+  line-height: 100%;
+  color: var(--color-text-orange);
 }
 
 .title {
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-size: 24px;
   font-weight: 700;
+  line-height: 100%;
   color: var(--color-text-primary);
-  line-height: 1.4;
+  flex: 1;
+}
+
+.badge-row {
+  display: flex;
+  justify-content: flex-end;
 }

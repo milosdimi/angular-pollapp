@@ -1,0 +1,145 @@
+.survey-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  &__tabs {
+    display: flex;
+    gap: 24px;
+  }
+
+  &__tab {
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 400;
+    color: #35273a;
+    background: #ffcfa1;
+    border: none;
+    border-radius: 20px;
+    padding: 2px 10px;
+    width: 106px;
+    height: 25px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #fee9d4;
+    }
+
+    &--active {
+      background: #ffb770;
+    }
+  }
+
+  &__sort {
+    position: relative;
+  }
+}
+
+/* Sort dropdown */
+.sort {
+  &__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 206px;
+    padding: 4px 6px 4px 10px;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-text-primary);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--color-bg-card-dark);
+    }
+  }
+
+  &__arrow {
+    font-size: 10px;
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    width: 206px;
+    background: var(--color-bg-card-dark);
+    border-radius: 6px;
+    padding: 8px 4px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 10;
+  }
+
+  &__item {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--color-accent);
+      color: #35273a;
+    }
+
+    &--active {
+      color: var(--color-accent);
+    }
+  }
+}
+
+/* Grid */
+.survey-list {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 513px);
+    gap: 16px;
+    max-height: 413px;
+    overflow-y: auto;
+    padding-right: 4px;
+
+    /* Custom scrollbar */
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-accent);
+      border-radius: 4px;
+    }
+  }
+
+  &__empty {
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    grid-column: span 2;
+    text-align: center;
+    padding: 32px 0;
+  }
+}

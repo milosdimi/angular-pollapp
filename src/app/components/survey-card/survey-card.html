@@ -3,5 +3,7 @@
     <span class="category">{{ survey().category }}</span>
   }
   <h3 class="title">{{ survey().title }}</h3>
-  <app-deadline-badge [endDate]="survey().end_date" />
+  <div class="badge-row">
+    <app-deadline-badge [endDate]="survey().end_date" />
+  </div>
 </article>
