@@ -1,8 +1,9 @@
 .navbar {
-  padding: 24px 48px;
+  padding-top: 39px;
 
   &__logo img {
-    height: 48px;
-    width: auto;
+    width: 119px;
+    height: 46px;
+    object-fit: contain;
   }
 }
