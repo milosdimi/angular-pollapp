@@ -33,7 +33,7 @@
               <div class="field-sub">
                 <label class="field-label">Set end date <span class="optional">(optional)</span></label>
                 <div class="input-row">
-                  <input class="input input--short" type="date" formControlName="end_date" />
+                  <input class="input input--short" type="date" formControlName="end_date" [min]="today" (blur)="onDateBlur()" />
                   <button class="delete-btn" type="button" (click)="form.patchValue({end_date: ''})">
                     <img class="icon-normal" src="icons/delete.png" alt="Delete" />
                     <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
@@ -71,11 +71,11 @@
         <!-- Questions -->
         <div class="questions-area" formArrayName="questions">
           <div class="questions-grid">
-            @for (question of questions.controls; track $index) {
-              <div class="question-block" [formGroupName]="$index">
+            @for (question of questions.controls; track $index; let qi = $index) {
+              <div class="question-block" [formGroupName]="qi">
                 <div class="question-block__header">
-                  <strong class="question-block__num">{{ $index + 1 }}. Question</strong>
-                  <button class="delete-btn" type="button" (click)="removeQuestion($index)">
+                  <strong class="question-block__num">{{ qi + 1 }}. Question</strong>
+                  <button class="delete-btn" type="button" (click)="removeQuestion(qi)">
                     <img class="icon-normal" src="icons/delete.png" alt="Delete" />
                     <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
                   </button>
@@ -91,11 +91,11 @@
                 </div>
 
                 <div formArrayName="answers">
-                  @for (answer of answersOf($index).controls; track $index; let j = $index) {
+                  @for (answer of answersOf(qi).controls; track answer; let j = $index) {
                     <div class="answer-row">
                       <span class="answer-letter">{{ LETTERS[j] }}.</span>
                       <input class="input" type="text" [formControlName]="j" />
-                      <button class="delete-btn" type="button" (click)="removeAnswer($index, j)">
+                      <button class="delete-btn" type="button" (click)="removeAnswer(qi, j)">
                         <img class="icon-normal" src="icons/delete.png" alt="Delete" />
                         <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
                       </button>
@@ -103,9 +103,15 @@
                   }
                 </div>
 
-                <button class="add-answer-btn" type="button" (click)="addAnswer($index)">
-                  Add answer ⊕
-                </button>
+                <div class="add-answer-row">
+                  <button class="add-answer-btn" type="button" (click)="addAnswer(qi)">
+                    Add answer
+                    <img src="icons/add_circle.png" alt="" />
+                  </button>
+                  @if (answersOf(qi).length > 2) {
+                    <span class="add-answer-hint">You can add up to 6 answer fields.</span>
+                  }
+                </div>
               </div>
             }
 

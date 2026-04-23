@@ -162,15 +162,20 @@
   width: 26px;
   height: 26px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .icon-normal,
   .icon-hover {
     width: 26px;
     height: 26px;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     transition: opacity 0.2s ease;
+    object-fit: contain;
   }
 
   .icon-normal { opacity: 1; }
@@ -197,14 +202,20 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+
+  &:hover .arrow,
+  &:focus .arrow {
+    color: var(--color-accent);
+  }
 }
 
 .arrow {
   font-size: 10px;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease, color 0.2s ease;
 
   &--open {
     transform: rotate(180deg);
+    color: var(--color-accent);
   }
 }
 
@@ -236,11 +247,6 @@
 }
 
 /* Questions */
-.questions-area {
-  border: 1px dashed var(--color-text-muted);
-  border-radius: 5px;
-  padding: 20px;
-}
 
 .questions-grid {
   display: grid;
@@ -299,20 +305,49 @@
   flex-shrink: 0;
 }
 
+.add-answer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .add-answer-btn {
-  background: none;
-  border: none;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 146px;
+  height: 40px;
+  padding: 8px 12px;
+  background: #8e709940;
+  border: 1px solid #8e709980;
   color: var(--color-text-primary);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 10px;
   cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+
+  img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
 
   &:hover {
-    color: var(--color-accent);
+    background: #8e709965;
   }
+}
+
+.add-answer-hint {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 .add-question-cell {

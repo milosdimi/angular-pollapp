@@ -1,6 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+
+function minDateValidator(min: string) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
+    return control.value >= min ? null : { minDate: true };
+  };
+}
 
 const CATEGORIES: string[] = [
   'Team Activities',
@@ -25,12 +32,14 @@ export class CreateSurvey {
 
   readonly categories = CATEGORIES;
   readonly LETTERS = LETTERS;
+  readonly today = new Date().toISOString().split('T')[0];
+
   categoryOpen = false;
 
   form: FormGroup = this.fb.group({
     title: ['', Validators.required],
     description: [''],
-    end_date: [''],
+    end_date: ['', minDateValidator(this.today)],
     category: [''],
     questions: this.fb.array([this.createQuestion()]),
   });
@@ -41,6 +50,10 @@ export class CreateSurvey {
 
   answersOf(questionIndex: number): FormArray {
     return this.questions.at(questionIndex).get('answers') as FormArray;
+  }
+
+  isAtMaxAnswers(questionIndex: number): boolean {
+    return this.answersOf(questionIndex).length >= 6;
   }
 
   createQuestion(): FormGroup {
@@ -73,9 +86,22 @@ export class CreateSurvey {
     if (answers.length > 2) answers.removeAt(answerIndex);
   }
 
+  onDateBlur(): void {
+    const ctrl = this.form.get('end_date')!;
+    if (ctrl.value && ctrl.value < this.today) ctrl.setValue(this.today);
+  }
+
   selectCategory(cat: string): void {
     this.form.patchValue({ category: cat });
     this.categoryOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.category-select')) {
+      this.categoryOpen = false;
+    }
   }
 
   onCancel(): void {
