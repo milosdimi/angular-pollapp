@@ -46,3 +46,6 @@ Thumbs.db
 # Environment files with secrets
 src/environments/environment.ts
 src/environments/environment.prod.ts
+
+# Local notes
+TODO.md

@@ -88,6 +88,10 @@ export class SupabaseService {
       .subscribe();
   }
 
+  unsubscribe(channel: ReturnType<typeof this.client.channel>): void {
+    this.client.removeChannel(channel);
+  }
+
   private mapSurvey(raw: any): Survey {
     return {
       ...raw,

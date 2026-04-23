@@ -135,6 +135,23 @@
   }
 }
 
+.state-msg {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  text-align: center;
+  padding: 80px 0;
+
+  &--error { color: #ff7070; }
+}
+
+.voted-msg {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  color: #ee9236;
+}
+
 /* Complete button */
 .complete-btn {
   padding: 12px 24px;

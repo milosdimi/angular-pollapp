@@ -1,64 +1,9 @@
-import { Component, signal, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, signal, inject, computed, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { Navbar } from '../../components/navbar/navbar';
 import { Survey, Question, Answer } from '../../models/survey.interface';
-
-const MOCK_SURVEY: Survey = {
-  id: 1,
-  title: "Let's Plan the Next Team Event Together",
-  description: "We want to create team activities that everyone will enjoy – share your preferences and ideas in our survey to help us plan better experiences together.",
-  category: 'Team activities',
-  end_date: '2025-09-01',
-  status: 'published',
-  created_at: '',
-  questions: [
-    {
-      id: 1, survey_id: 1,
-      text: 'Which date would work best for you?',
-      allow_multiple: true,
-      answers: [
-        { id: 1, question_id: 1, text: '19.09.2025, Friday', vote_count: 27 },
-        { id: 2, question_id: 1, text: '10.10.2025, Friday', vote_count: 44 },
-        { id: 3, question_id: 1, text: '11.10.2025, Saturday', vote_count: 3 },
-        { id: 4, question_id: 1, text: '31.10.2025, Friday', vote_count: 26 },
-      ],
-    },
-    {
-      id: 2, survey_id: 1,
-      text: 'Choose the activities you prefer',
-      allow_multiple: true,
-      answers: [
-        { id: 5, question_id: 2, text: 'Outdoor adventure like kayaking', vote_count: 60 },
-        { id: 6, question_id: 2, text: 'Office Costume Party', vote_count: 0 },
-        { id: 7, question_id: 2, text: 'Bowling, mini-golf, volleyball', vote_count: 14 },
-        { id: 8, question_id: 2, text: 'Beach party, Music & cocktails', vote_count: 26 },
-        { id: 9, question_id: 2, text: 'Escape room', vote_count: 0 },
-      ],
-    },
-    {
-      id: 3, survey_id: 1,
-      text: "What's most important to you in a team event?",
-      allow_multiple: false,
-      answers: [
-        { id: 10, question_id: 3, text: 'Team bonding', vote_count: 44 },
-        { id: 11, question_id: 3, text: 'Food and drinks', vote_count: 3 },
-        { id: 12, question_id: 3, text: 'Trying something new', vote_count: 26 },
-        { id: 13, question_id: 3, text: 'Keeping it low-key and stress-free', vote_count: 27 },
-      ],
-    },
-    {
-      id: 4, survey_id: 1,
-      text: 'How long would you prefer the event to last?',
-      allow_multiple: false,
-      answers: [
-        { id: 14, question_id: 4, text: 'Half a day', vote_count: 14 },
-        { id: 15, question_id: 4, text: 'Full day', vote_count: 86 },
-        { id: 16, question_id: 4, text: 'Evening only', vote_count: 0 },
-      ],
-    },
-  ],
-};
+import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-survey-detail',
@@ -66,12 +11,81 @@ const MOCK_SURVEY: Survey = {
   templateUrl: './survey-detail.html',
   styleUrl: './survey-detail.scss',
 })
-export class SurveyDetail {
+export class SurveyDetail implements OnInit, OnDestroy {
   private router = inject(Router);
-  survey = signal<Survey>(MOCK_SURVEY);
-  hasResults = signal<boolean>(true);
+  private route = inject(ActivatedRoute);
+  private supabase = inject(SupabaseService);
+
+  survey = signal<Survey | null>(null);
+  isLoading = signal(true);
+  loadError = signal<string | null>(null);
+  isVoting = signal(false);
+  hasVoted = signal(false);
+
+  private selections = signal<Map<number, Set<number>>>(new Map());
+  private channel: any = null;
 
   readonly LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  hasResults = computed(() => {
+    const s = this.survey();
+    if (!s) return false;
+    return s.questions.some(q => q.answers.some(a => a.vote_count > 0));
+  });
+
+  async ngOnInit(): Promise<void> {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    await this.loadSurvey(id);
+    this.channel = this.supabase.subscribeToAnswers(id, () => this.loadSurvey(id));
+  }
+
+  ngOnDestroy(): void {
+    if (this.channel) this.supabase.unsubscribe(this.channel);
+  }
+
+  private async loadSurvey(id: number): Promise<void> {
+    try {
+      const data = await this.supabase.getSurveyById(id);
+      this.survey.set(data);
+    } catch (err: any) {
+      this.loadError.set(err?.message ?? 'Could not load survey.');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  isSelected(questionId: number, answerId: number): boolean {
+    return this.selections().get(questionId)?.has(answerId) ?? false;
+  }
+
+  toggleAnswer(question: Question, answerId: number): void {
+    if (this.hasVoted()) return;
+    const map = new Map(this.selections());
+    const set = new Set(map.get(question.id) ?? []);
+
+    if (question.allow_multiple) {
+      set.has(answerId) ? set.delete(answerId) : set.add(answerId);
+    } else {
+      set.clear();
+      set.add(answerId);
+    }
+    map.set(question.id, set);
+    this.selections.set(map);
+  }
+
+  async onComplete(): Promise<void> {
+    if (this.isVoting() || this.hasVoted()) return;
+    this.isVoting.set(true);
+    try {
+      const allSelected = [...this.selections().values()].flatMap(s => [...s]);
+      await Promise.all(allSelected.map(id => this.supabase.vote(id)));
+      this.hasVoted.set(true);
+    } catch (err) {
+      console.error('Vote failed:', err);
+    } finally {
+      this.isVoting.set(false);
+    }
+  }
 
   totalVotes(question: Question): number {
     return question.answers.reduce((sum, a) => sum + a.vote_count, 0);
