@@ -1,1 +1,128 @@
-<p>create-survey works!</p>
+<div class="page">
+  <div class="card" [formGroup]="form">
+
+    <!-- Header -->
+    <header class="card__header">
+      <div class="card__header-left">
+        <span class="draft-badge">Draft</span>
+        <div class="card__title-row">
+          <h1 class="card__title">Create new survey</h1>
+          <button class="cancel-btn" type="button" (click)="onCancel()">
+            Cancel <span>✕</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Form -->
+    <div class="form-area">
+      <div class="form-area__fields">
+
+        <!-- Top row: name + description -->
+        <div class="top-row">
+          <div class="field-group">
+            <label class="field-label">Survey name</label>
+            <div class="input-row">
+              <input class="input" type="text" formControlName="title" />
+              <button class="delete-btn" type="button" (click)="form.patchValue({title: ''})">
+                <img class="icon-normal" src="icons/delete.png" alt="Delete" />
+                <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+              </button>
+            </div>
+            <div class="bottom-row">
+              <div class="field-sub">
+                <label class="field-label">Set end date <span class="optional">(optional)</span></label>
+                <div class="input-row">
+                  <input class="input input--short" type="date" formControlName="end_date" />
+                  <button class="delete-btn" type="button" (click)="form.patchValue({end_date: ''})">
+                    <img class="icon-normal" src="icons/delete.png" alt="Delete" />
+                    <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                  </button>
+                </div>
+              </div>
+              <div class="category-select">
+                <button class="category-trigger" type="button" (click)="categoryOpen = !categoryOpen">
+                  <span>{{ form.value.category || 'Choose category' }}</span>
+                  <span class="arrow" [class.arrow--open]="categoryOpen">▼</span>
+                </button>
+                @if (categoryOpen) {
+                  <ul class="category-dropdown">
+                    @for (cat of categories; track cat) {
+                      <li class="category-item" (click)="selectCategory(cat)">{{ cat }}</li>
+                    }
+                  </ul>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Describing text <span class="optional">(optional)</span></label>
+            <div class="input-row">
+              <textarea class="input input--textarea" formControlName="description"></textarea>
+              <button class="delete-btn" type="button" (click)="form.patchValue({description: ''})">
+                <img class="icon-normal" src="icons/delete.png" alt="Delete" />
+                <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Questions -->
+        <div class="questions-area" formArrayName="questions">
+          <div class="questions-grid">
+            @for (question of questions.controls; track $index) {
+              <div class="question-block" [formGroupName]="$index">
+                <div class="question-block__header">
+                  <strong class="question-block__num">{{ $index + 1 }}. Question</strong>
+                  <button class="delete-btn" type="button" (click)="removeQuestion($index)">
+                    <img class="icon-normal" src="icons/delete.png" alt="Delete" />
+                    <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                  </button>
+                </div>
+                <input class="input" type="text" formControlName="text" placeholder="Which date would work best for you?" />
+
+                <div class="answers-header">
+                  <span class="field-label">Answers</span>
+                  <label class="checkbox-label">
+                    <input type="checkbox" formControlName="allow_multiple" />
+                    Allow multiple answers.
+                  </label>
+                </div>
+
+                <div formArrayName="answers">
+                  @for (answer of answersOf($index).controls; track $index; let j = $index) {
+                    <div class="answer-row">
+                      <span class="answer-letter">{{ LETTERS[j] }}.</span>
+                      <input class="input" type="text" [formControlName]="j" />
+                      <button class="delete-btn" type="button" (click)="removeAnswer($index, j)">
+                        <img class="icon-normal" src="icons/delete.png" alt="Delete" />
+                        <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                      </button>
+                    </div>
+                  }
+                </div>
+
+                <button class="add-answer-btn" type="button" (click)="addAnswer($index)">
+                  Add answer ⊕
+                </button>
+              </div>
+            }
+
+            <div class="add-question-cell">
+              <button class="add-question-btn" type="button" (click)="addQuestion()">
+                Add next question ⊕
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Publish -->
+    <div class="card__footer">
+      <button class="publish-btn" type="button" (click)="onPublish()">Publish</button>
+    </div>
+
+  </div>
+</div>
