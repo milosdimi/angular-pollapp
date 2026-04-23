@@ -56,6 +56,14 @@ export class CreateSurvey {
     return this.answersOf(questionIndex).length >= 6;
   }
 
+  showPublishedOverlay = false;
+
+  clearQuestion(questionIndex: number): void {
+    const q = this.questions.at(questionIndex) as FormGroup;
+    q.patchValue({ text: '' });
+    this.answersOf(questionIndex).controls.forEach(ctrl => ctrl.setValue(''));
+  }
+
   createQuestion(): FormGroup {
     return this.fb.group({
       text: ['', Validators.required],
@@ -110,9 +118,14 @@ export class CreateSurvey {
 
   onPublish(): void {
     if (this.form.valid) {
-      console.log('Publish:', this.form.value);
+      this.showPublishedOverlay = true;
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  closeOverlay(): void {
+    this.showPublishedOverlay = false;
+    this.router.navigate(['/']);
   }
 }

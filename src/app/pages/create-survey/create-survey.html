@@ -75,7 +75,7 @@
               <div class="question-block" [formGroupName]="qi">
                 <div class="question-block__header">
                   <strong class="question-block__num">{{ qi + 1 }}. Question</strong>
-                  <button class="delete-btn" type="button" (click)="removeQuestion(qi)">
+                  <button class="delete-btn" type="button" (click)="qi === 0 ? clearQuestion(0) : removeQuestion(qi)">
                     <img class="icon-normal" src="icons/delete.png" alt="Delete" />
                     <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
                   </button>
@@ -105,7 +105,7 @@
 
                 <div class="add-answer-row">
                   <button class="add-answer-btn" type="button" (click)="addAnswer(qi)">
-                    Add answer
+                    <span>Add answer</span>
                     <img src="icons/add_circle.png" alt="" />
                   </button>
                   @if (answersOf(qi).length > 2) {
@@ -117,7 +117,8 @@
 
             <div class="add-question-cell">
               <button class="add-question-btn" type="button" (click)="addQuestion()">
-                Add next question ⊕
+                Add next question
+                <img src="icons/add_circle.png" alt="" />
               </button>
             </div>
           </div>
@@ -127,8 +128,19 @@
 
     <!-- Publish -->
     <div class="card__footer">
-      <button class="publish-btn" type="button" (click)="onPublish()">Publish</button>
+      <button class="publish-btn" type="button" (click)="onPublish()">
+        Publish
+        <img class="publish-btn__icon" src="icons/confinm.png" alt="" />
+      </button>
     </div>
 
   </div>
 </div>
+
+@if (showPublishedOverlay) {
+  <div class="overlay" (click)="closeOverlay()">
+    <div class="overlay__toast">
+      Your survey is now published
+    </div>
+  </div>
+}

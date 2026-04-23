@@ -320,7 +320,7 @@
   padding: 8px 12px;
   background: #8e709940;
   border: 1px solid #8e709980;
-  color: var(--color-text-primary);
+  color: #fefdff;
   font-family: var(--font-ui);
   font-weight: 700;
   font-size: 16px;
@@ -331,10 +331,16 @@
   flex-shrink: 0;
   transition: background 0.2s ease;
 
+  span {
+    border-bottom: 1px solid #ffffff;
+  }
+
   img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+    margin-left: auto;
+    filter: brightness(0) invert(1);
   }
 
   &:hover {
@@ -359,26 +365,39 @@
 .add-question-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: var(--color-bg-card-dark);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 8px;
+  gap: 10px;
+  width: 195px;
+  height: 40px;
+  padding: 8px 12px;
+  background: #ffb7704d;
+  color: #fefdff;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
+
+  img {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-left: auto;
+    filter: brightness(0) invert(1);
+  }
 
   &:hover {
-    background: var(--color-accent);
-    color: var(--color-text-dark);
+    background: #ffb77070;
   }
 }
 
 /* Publish */
 .publish-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   padding: 12px 32px;
   background: #ffcfa1;
   color: var(--color-text-dark);
@@ -388,9 +407,50 @@
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
+
+  &__icon {
+    width: 0;
+    height: 24px;
+    opacity: 0;
+    transition: width 0.3s ease, opacity 0.3s ease;
+  }
 
   &:hover {
     background: #ffb770;
+  }
+
+  &:hover &__icon {
+    width: 24px;
+    opacity: 1;
+  }
+}
+
+/* Published overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  cursor: pointer;
+
+  &__toast {
+    width: 357px;
+    height: 86px;
+    border-radius: 5px 50px 5px 5px;
+    background: #ffcfa1;
+    color: var(--color-text-dark);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    padding: 14px 26px;
+    cursor: default;
   }
 }
