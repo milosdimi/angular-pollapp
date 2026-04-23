@@ -424,6 +424,11 @@
     width: 24px;
     opacity: 1;
   }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 }
 
 /* Published overlay */
@@ -435,7 +440,6 @@
   align-items: center;
   justify-content: center;
   z-index: 100;
-  cursor: pointer;
 
   &__toast {
     width: 357px;

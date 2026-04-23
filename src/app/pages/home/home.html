@@ -4,8 +4,15 @@
     <app-hero />
     <section class="your-surveys">
       <h2 class="your-surveys__title">Your surveys</h2>
-      <app-ending-soon [surveys]="endingSoonSurveys" (cardClick)="onCardClick($event)" />
-      <app-survey-list [surveys]="endingSoonSurveys" (cardClick)="onCardClick($event)" />
+
+      @if (isLoading()) {
+        <p class="state-msg">Loading surveys...</p>
+      } @else if (loadError()) {
+        <p class="state-msg state-msg--error">{{ loadError() }}</p>
+      } @else {
+        <app-ending-soon [surveys]="endingSoon()" (cardClick)="onCardClick($event)" />
+        <app-survey-list [surveys]="surveys()" (cardClick)="onCardClick($event)" />
+      }
     </section>
   </div>
   <app-footer />

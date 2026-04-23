@@ -23,3 +23,14 @@
     text-align: center;
   }
 }
+
+.state-msg {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-primary);
+  text-align: center;
+
+  &--error {
+    color: #ff7070;
+  }
+}

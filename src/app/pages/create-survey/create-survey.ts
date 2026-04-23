@@ -1,4 +1,4 @@
-import { Component, inject, HostListener } from '@angular/core';
+import { Component, inject, HostListener, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
@@ -58,8 +58,9 @@ export class CreateSurvey {
     return this.answersOf(questionIndex).length >= 6;
   }
 
-  showPublishedOverlay = false;
-  isPublishing = false;
+  showPublishedOverlay = signal(false);
+  isPublishing = signal(false);
+  publishError = signal<string | null>(null);
   private newSurveyId: number | null = null;
 
   clearQuestion(questionIndex: number): void {
@@ -126,7 +127,8 @@ export class CreateSurvey {
       return;
     }
 
-    this.isPublishing = true;
+    this.isPublishing.set(true);
+    this.publishError.set(null);
     const v = this.form.value;
 
     try {
@@ -141,16 +143,18 @@ export class CreateSurvey {
           answers: q.answers.filter((a: string) => a.trim() !== ''),
         })),
       });
-      this.showPublishedOverlay = true;
-    } catch (err) {
+      this.showPublishedOverlay.set(true);
+      setTimeout(() => this.closeOverlay(), 2000);
+    } catch (err: any) {
       console.error('Publish failed:', err);
+      this.publishError.set(err?.message ?? 'Something went wrong. Please try again.');
     } finally {
-      this.isPublishing = false;
+      this.isPublishing.set(false);
     }
   }
 
   closeOverlay(): void {
-    this.showPublishedOverlay = false;
-    this.router.navigate(['/survey', this.newSurveyId]);
+    this.showPublishedOverlay.set(false);
+    this.router.navigate(['/']);
   }
 }

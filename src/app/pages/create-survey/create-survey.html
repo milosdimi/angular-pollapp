@@ -128,17 +128,22 @@
 
     <!-- Publish -->
     <div class="card__footer">
-      <button class="publish-btn" type="button" (click)="onPublish()" [disabled]="isPublishing">
-        Publish
-        <img class="publish-btn__icon" src="icons/confinm.png" alt="" />
+      @if (publishError()) {
+        <span class="publish-error">{{ publishError() }}</span>
+      }
+      <button class="publish-btn" type="button" (click)="onPublish()" [disabled]="isPublishing()" [style.cursor]="isPublishing() ? 'not-allowed' : 'pointer'">
+        {{ isPublishing() ? 'Publishing...' : 'Publish' }}
+        @if (!isPublishing()) {
+          <img class="publish-btn__icon" src="icons/confinm.png" alt="" />
+        }
       </button>
     </div>
 
   </div>
 </div>
 
-@if (showPublishedOverlay) {
-  <div class="overlay" (click)="closeOverlay()">
+@if (showPublishedOverlay()) {
+  <div class="overlay">
     <div class="overlay__toast">
       Your survey is now published
     </div>

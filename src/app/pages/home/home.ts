@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Navbar } from '../../components/navbar/navbar';
 import { Hero } from './hero/hero';
@@ -6,27 +6,7 @@ import { EndingSoon } from './ending-soon/ending-soon';
 import { SurveyList } from './survey-list/survey-list';
 import { Footer } from '../../components/footer/footer';
 import { Survey } from '../../models/survey.interface';
-
-const MOCK_SURVEYS: Survey[] = [
-  {
-    id: 1, title: "Let's Plan the Next Team Event Together",
-    description: null, category: 'Team activities',
-    end_date: new Date(Date.now() + 1 * 86400000).toISOString(),
-    status: 'published', created_at: '', questions: [],
-  },
-  {
-    id: 2, title: 'Fit & wellness survey!',
-    description: null, category: 'Health & Wellness',
-    end_date: new Date(Date.now() + 2 * 86400000).toISOString(),
-    status: 'published', created_at: '', questions: [],
-  },
-  {
-    id: 3, title: 'Gaming habits and favorite games!',
-    description: null, category: 'Gaming & Entertainment',
-    end_date: new Date(Date.now() + 3 * 86400000).toISOString(),
-    status: 'published', created_at: '', questions: [],
-  },
-];
+import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-home',
@@ -34,9 +14,31 @@ const MOCK_SURVEYS: Survey[] = [
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home {
+export class Home implements OnInit {
   private router = inject(Router);
-  endingSoonSurveys: Survey[] = MOCK_SURVEYS;
+  private supabase = inject(SupabaseService);
+
+  surveys = signal<Survey[]>([]);
+  isLoading = signal(true);
+  loadError = signal<string | null>(null);
+
+  endingSoon = computed(() =>
+    this.surveys()
+      .filter(s => s.end_date)
+      .sort((a, b) => new Date(a.end_date!).getTime() - new Date(b.end_date!).getTime())
+      .slice(0, 3)
+  );
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const data = await this.supabase.getSurveys();
+      this.surveys.set(data);
+    } catch (err: any) {
+      this.loadError.set(err?.message ?? 'Could not load surveys.');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
 
   onCardClick(id: number): void {
     this.router.navigate(['/survey', id]);
