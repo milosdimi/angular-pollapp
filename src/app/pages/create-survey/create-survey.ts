@@ -1,6 +1,7 @@
 import { Component, inject, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { SupabaseService } from '../../services/supabase.service';
 
 function minDateValidator(min: string) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -29,6 +30,7 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 export class CreateSurvey {
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private supabase = inject(SupabaseService);
 
   readonly categories = CATEGORIES;
   readonly LETTERS = LETTERS;
@@ -57,6 +59,8 @@ export class CreateSurvey {
   }
 
   showPublishedOverlay = false;
+  isPublishing = false;
+  private newSurveyId: number | null = null;
 
   clearQuestion(questionIndex: number): void {
     const q = this.questions.at(questionIndex) as FormGroup;
@@ -116,16 +120,37 @@ export class CreateSurvey {
     this.router.navigate(['/']);
   }
 
-  onPublish(): void {
-    if (this.form.valid) {
-      this.showPublishedOverlay = true;
-    } else {
+  async onPublish(): Promise<void> {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
+    }
+
+    this.isPublishing = true;
+    const v = this.form.value;
+
+    try {
+      this.newSurveyId = await this.supabase.createSurvey({
+        title: v.title,
+        description: v.description,
+        end_date: v.end_date,
+        category: v.category,
+        questions: v.questions.map((q: any) => ({
+          text: q.text,
+          allow_multiple: q.allow_multiple,
+          answers: q.answers.filter((a: string) => a.trim() !== ''),
+        })),
+      });
+      this.showPublishedOverlay = true;
+    } catch (err) {
+      console.error('Publish failed:', err);
+    } finally {
+      this.isPublishing = false;
     }
   }
 
   closeOverlay(): void {
     this.showPublishedOverlay = false;
-    this.router.navigate(['/']);
+    this.router.navigate(['/survey', this.newSurveyId]);
   }
 }

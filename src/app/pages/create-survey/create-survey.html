@@ -128,7 +128,7 @@
 
     <!-- Publish -->
     <div class="card__footer">
-      <button class="publish-btn" type="button" (click)="onPublish()">
+      <button class="publish-btn" type="button" (click)="onPublish()" [disabled]="isPublishing">
         Publish
         <img class="publish-btn__icon" src="icons/confinm.png" alt="" />
       </button>
