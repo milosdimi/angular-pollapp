@@ -1,10 +1,12 @@
 .page {
   min-height: 100vh;
   background: var(--color-bg-dark);
-  padding: 72px 109px 80px;
+  padding: 72px 24px 80px;
 }
 
 .card {
+  max-width: 1218px;
+  margin: 0 auto;
   background: #35273a;
   border-radius: 5px 100px 5px 5px;
   padding: 40px 54px;
