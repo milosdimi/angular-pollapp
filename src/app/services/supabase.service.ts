@@ -76,6 +76,50 @@ export class SupabaseService {
     return survey.id;
   }
 
+  async deleteSurvey(id: number): Promise<void> {
+    const { error } = await this.client.from('surveys').delete().eq('id', id);
+    if (error) throw error;
+  }
+
+  async updateSurvey(id: number, payload: {
+    title: string;
+    description: string;
+    end_date: string;
+    category: string;
+    questions: { text: string; allow_multiple: boolean; answers: string[] }[];
+  }): Promise<void> {
+    const { error: surveyError } = await this.client
+      .from('surveys')
+      .update({
+        title: payload.title,
+        description: payload.description || null,
+        end_date: payload.end_date || null,
+        category: payload.category || null,
+      })
+      .eq('id', id);
+
+    if (surveyError) throw surveyError;
+
+    const { error: deleteError } = await this.client
+      .from('questions').delete().eq('survey_id', id);
+
+    if (deleteError) throw deleteError;
+
+    for (let qi = 0; qi < payload.questions.length; qi++) {
+      const q = payload.questions[qi];
+      const { data: question, error: qError } = await this.client
+        .from('questions')
+        .insert({ survey_id: id, text: q.text, allow_multiple: q.allow_multiple, order_index: qi })
+        .select('id').single();
+
+      if (qError) throw qError;
+
+      const answerRows = q.answers.map((text, ai) => ({ question_id: question.id, text, order_index: ai }));
+      const { error: aError } = await this.client.from('answers').insert(answerRows);
+      if (aError) throw aError;
+    }
+  }
+
   async vote(answerId: number): Promise<void> {
     const { error } = await this.client.rpc('increment_vote', { answer_id: answerId });
     if (error) throw error;
