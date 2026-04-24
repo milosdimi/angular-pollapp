@@ -37,6 +37,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.hasVotedFor(id)) this.hasVoted.set(true);
     await this.loadSurvey(id);
     this.channel = this.supabase.subscribeToAnswers(id, () => this.loadSurvey(id));
   }
@@ -81,11 +82,25 @@ export class SurveyDetail implements OnInit, OnDestroy {
     try {
       const allSelected = [...this.selections().values()].flatMap(s => [...s]);
       await Promise.all(allSelected.map(id => this.supabase.vote(id)));
+      const surveyId = Number(this.route.snapshot.paramMap.get('id'));
+      this.markVotedFor(surveyId);
       this.hasVoted.set(true);
     } catch (err) {
       console.error('Vote failed:', err);
     } finally {
       this.isVoting.set(false);
+    }
+  }
+
+  private hasVotedFor(surveyId: number): boolean {
+    const voted = JSON.parse(localStorage.getItem('pollapp_voted') ?? '[]') as number[];
+    return voted.includes(surveyId);
+  }
+
+  private markVotedFor(surveyId: number): void {
+    const voted = JSON.parse(localStorage.getItem('pollapp_voted') ?? '[]') as number[];
+    if (!voted.includes(surveyId)) {
+      localStorage.setItem('pollapp_voted', JSON.stringify([...voted, surveyId]));
     }
   }
 
