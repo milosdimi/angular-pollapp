@@ -1,6 +1,9 @@
 <article class="card" (click)="onClick()">
   @if (survey().category) {
-    <span class="category">{{ survey().category }}</span>
+    <span class="category">
+      <span class="category__icon">{{ categoryIcon(survey().category!) }}</span>
+      {{ survey().category }}
+    </span>
   }
   <h3 class="title">{{ survey().title }}</h3>
   <div class="badge-row">
