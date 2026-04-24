@@ -1,6 +1,7 @@
 import { Component, signal, inject, computed, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
+import { Title, Meta } from '@angular/platform-browser';
 import { Navbar } from '../../components/navbar/navbar';
 import { Survey, Question, Answer } from '../../models/survey.interface';
 import { SupabaseService } from '../../services/supabase.service';
@@ -17,6 +18,8 @@ export class SurveyDetail implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private supabase = inject(SupabaseService);
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
 
   survey = signal<Survey | null>(null);
   isLoading = signal(true);
@@ -57,6 +60,8 @@ export class SurveyDetail implements OnInit, OnDestroy {
     try {
       const data = await this.supabase.getSurveyById(id);
       this.survey.set(data);
+      this.titleService.setTitle(`${data.title} – PollApp`);
+      this.metaService.updateTag({ name: 'description', content: data.description ?? 'Nimm an dieser Umfrage teil und sieh die Ergebnisse in Echtzeit.' });
     } catch (err: any) {
       this.loadError.set(err?.message ?? 'Could not load survey.');
     } finally {

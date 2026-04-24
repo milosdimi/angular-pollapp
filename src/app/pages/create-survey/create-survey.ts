@@ -1,5 +1,6 @@
-import { Component, inject, HostListener, signal } from '@angular/core';
+import { Component, inject, HostListener, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
 
@@ -27,10 +28,17 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   templateUrl: './create-survey.html',
   styleUrl: './create-survey.scss',
 })
-export class CreateSurvey {
+export class CreateSurvey implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private supabase = inject(SupabaseService);
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Neue Umfrage erstellen – PollApp');
+    this.metaService.updateTag({ name: 'description', content: 'Erstelle eine neue Umfrage mit Fragen und Antwortoptionen.' });
+  }
 
   readonly categories = CATEGORIES;
   readonly LETTERS = LETTERS;

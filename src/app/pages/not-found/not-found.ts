@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { Navbar } from '../../components/navbar/navbar';
 
 @Component({
@@ -8,4 +9,10 @@ import { Navbar } from '../../components/navbar/navbar';
   templateUrl: './not-found.html',
   styleUrl: './not-found.scss',
 })
-export class NotFound {}
+export class NotFound implements OnInit {
+  private titleService = inject(Title);
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Seite nicht gefunden – PollApp');
+  }
+}

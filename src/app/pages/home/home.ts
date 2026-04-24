@@ -1,5 +1,6 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { Navbar } from '../../components/navbar/navbar';
 import { Hero } from './hero/hero';
 import { EndingSoon } from './ending-soon/ending-soon';
@@ -18,6 +19,8 @@ import { Spinner } from '../../components/spinner/spinner';
 export class Home implements OnInit {
   private router = inject(Router);
   private supabase = inject(SupabaseService);
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
 
   surveys = signal<Survey[]>([]);
   isLoading = signal(true);
@@ -31,6 +34,8 @@ export class Home implements OnInit {
   );
 
   async ngOnInit(): Promise<void> {
+    this.titleService.setTitle('PollApp – Umfragen erstellen und teilen');
+    this.metaService.updateTag({ name: 'description', content: 'Erstelle, teile und werte Umfragen in Echtzeit aus.' });
     try {
       const data = await this.supabase.getSurveys();
       this.surveys.set(data);
