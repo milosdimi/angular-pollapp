@@ -14,7 +14,7 @@
           <div class="survey-panel__top">
             <span class="survey-panel__status">{{ survey()!.status | titlecase }}</span>
             <div class="survey-panel__meta">
-              <span>Ends on {{ survey()!.end_date }}</span>
+              <span>Ends on {{ survey()!.end_date | formatDate }}</span>
               <span>Category: {{ survey()!.category }}</span>
             </div>
             <h1 class="survey-panel__title">{{ survey()!.title }}</h1>

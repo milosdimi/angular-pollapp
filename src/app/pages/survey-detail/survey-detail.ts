@@ -5,10 +5,11 @@ import { Navbar } from '../../components/navbar/navbar';
 import { Survey, Question, Answer } from '../../models/survey.interface';
 import { SupabaseService } from '../../services/supabase.service';
 import { Spinner } from '../../components/spinner/spinner';
+import { FormatDatePipe } from '../../pipes/format-date.pipe';
 
 @Component({
   selector: 'app-survey-detail',
-  imports: [Navbar, TitleCasePipe, Spinner],
+  imports: [Navbar, TitleCasePipe, Spinner, FormatDatePipe],
   templateUrl: './survey-detail.html',
   styleUrl: './survey-detail.scss',
 })
