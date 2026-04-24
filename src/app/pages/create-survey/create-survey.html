@@ -151,7 +151,7 @@
 @if (showPublishedOverlay()) {
   <div class="overlay">
     <div class="overlay__toast">
-      Your survey is now published
+      {{ editId ? 'Survey updated!' : 'Your survey is now published' }}
     </div>
   </div>
 }

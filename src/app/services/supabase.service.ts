@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
-import { Survey, Question, Answer } from '../models/survey.interface';
+import { Survey } from '../models/survey.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -77,6 +77,7 @@ export class SupabaseService {
   }
 
   async deleteSurvey(id: number): Promise<void> {
+    await this.deleteQuestionsAndAnswers(id);
     const { error } = await this.client.from('surveys').delete().eq('id', id);
     if (error) throw error;
   }
@@ -100,10 +101,7 @@ export class SupabaseService {
 
     if (surveyError) throw surveyError;
 
-    const { error: deleteError } = await this.client
-      .from('questions').delete().eq('survey_id', id);
-
-    if (deleteError) throw deleteError;
+    await this.deleteQuestionsAndAnswers(id);
 
     for (let qi = 0; qi < payload.questions.length; qi++) {
       const q = payload.questions[qi];
@@ -134,6 +132,17 @@ export class SupabaseService {
 
   unsubscribe(channel: ReturnType<typeof this.client.channel>): void {
     this.client.removeChannel(channel);
+  }
+
+  private async deleteQuestionsAndAnswers(surveyId: number): Promise<void> {
+    const { data: questions } = await this.client
+      .from('questions').select('id').eq('survey_id', surveyId);
+
+    if (questions?.length) {
+      const ids = questions.map((q: any) => q.id);
+      await this.client.from('answers').delete().in('question_id', ids);
+      await this.client.from('questions').delete().eq('survey_id', surveyId);
+    }
   }
 
   private mapSurvey(raw: any): Survey {
