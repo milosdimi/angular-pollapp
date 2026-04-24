@@ -5,6 +5,10 @@
   flex-direction: column;
   gap: 92px;
   padding-bottom: 80px;
+
+  @media (max-width: 850px) {
+    gap: 46px;
+  }
 }
 
 .your-surveys {

@@ -140,7 +140,7 @@
       <button class="publish-btn" type="button" (click)="onPublish()" [disabled]="isPublishing()" [style.cursor]="isPublishing() ? 'not-allowed' : 'pointer'">
         {{ isPublishing() ? (editId ? 'Updating...' : 'Publishing...') : (editId ? 'Update' : 'Publish') }}
         @if (!isPublishing()) {
-          <img class="publish-btn__icon" src="icons/confinm.png" alt="" />
+          <img class="publish-btn__icon" src="icons/check.png" alt="check img" />
         }
       </button>
     </div>

@@ -197,11 +197,19 @@
     object-fit: contain;
   }
 
-  .icon-normal { opacity: 1; }
-  .icon-hover  { opacity: 0; }
+  .icon-normal {
+    opacity: 1;
+  }
+  .icon-hover {
+    opacity: 0;
+  }
 
-  &:hover .icon-normal { opacity: 0; }
-  &:hover .icon-hover  { opacity: 1; }
+  &:hover .icon-normal {
+    opacity: 0;
+  }
+  &:hover .icon-hover {
+    opacity: 1;
+  }
 }
 
 /* Category dropdown */
@@ -230,7 +238,9 @@
 
 .arrow {
   font-size: 10px;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 
   &--open {
     transform: rotate(180deg);
@@ -437,9 +447,11 @@
 
   &__icon {
     width: 0;
-    height: 24px;
+    height: 16px;
     opacity: 0;
-    transition: width 0.3s ease, opacity 0.3s ease;
+    transition:
+      width 0.3s ease,
+      opacity 0.3s ease;
   }
 
   &:hover {
@@ -447,7 +459,8 @@
   }
 
   &:hover &__icon {
-    width: 24px;
+    width: 18px;
+    height: 16px;
     opacity: 1;
   }
 
