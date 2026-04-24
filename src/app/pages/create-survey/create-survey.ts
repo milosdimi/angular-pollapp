@@ -1,8 +1,9 @@
 import { Component, inject, HostListener, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
+import { Survey } from '../../models/survey.interface';
 
 function minDateValidator(min: string) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -30,14 +31,43 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 })
 export class CreateSurvey implements OnInit {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private supabase = inject(SupabaseService);
   private titleService = inject(Title);
   private metaService = inject(Meta);
 
-  ngOnInit(): void {
-    this.titleService.setTitle('Neue Umfrage erstellen – PollApp');
-    this.metaService.updateTag({ name: 'description', content: 'Erstelle eine neue Umfrage mit Fragen und Antwortoptionen.' });
+  editId: number | null = null;
+
+  async ngOnInit(): Promise<void> {
+    const id = this.route.snapshot.queryParamMap.get('id');
+    if (id) {
+      this.editId = Number(id);
+      this.titleService.setTitle('Umfrage bearbeiten – PollApp');
+      const survey = await this.supabase.getSurveyById(this.editId);
+      this.patchForm(survey);
+    } else {
+      this.titleService.setTitle('Neue Umfrage erstellen – PollApp');
+      this.metaService.updateTag({ name: 'description', content: 'Erstelle eine neue Umfrage mit Fragen und Antwortoptionen.' });
+    }
+  }
+
+  private patchForm(survey: Survey): void {
+    this.form.patchValue({
+      title: survey.title,
+      description: survey.description ?? '',
+      end_date: survey.end_date ?? '',
+      category: survey.category ?? '',
+    });
+    this.questions.clear();
+    for (const q of survey.questions) {
+      const qGroup = this.fb.group({
+        text: [q.text, Validators.required],
+        allow_multiple: [q.allow_multiple],
+        answers: this.fb.array(q.answers.map(a => this.fb.control(a.text, Validators.required))),
+      });
+      this.questions.push(qGroup);
+    }
   }
 
   readonly categories = CATEGORIES;
@@ -139,18 +169,24 @@ export class CreateSurvey implements OnInit {
     this.publishError.set(null);
     const v = this.form.value;
 
+    const payload = {
+      title: v.title,
+      description: v.description,
+      end_date: v.end_date,
+      category: v.category,
+      questions: v.questions.map((q: any) => ({
+        text: q.text,
+        allow_multiple: q.allow_multiple,
+        answers: q.answers.filter((a: string) => a.trim() !== ''),
+      })),
+    };
+
     try {
-      this.newSurveyId = await this.supabase.createSurvey({
-        title: v.title,
-        description: v.description,
-        end_date: v.end_date,
-        category: v.category,
-        questions: v.questions.map((q: any) => ({
-          text: q.text,
-          allow_multiple: q.allow_multiple,
-          answers: q.answers.filter((a: string) => a.trim() !== ''),
-        })),
-      });
+      if (this.editId) {
+        await this.supabase.updateSurvey(this.editId, payload);
+      } else {
+        this.newSurveyId = await this.supabase.createSurvey(payload);
+      }
       this.showPublishedOverlay.set(true);
       setTimeout(() => this.closeOverlay(), 2000);
     } catch (err: any) {

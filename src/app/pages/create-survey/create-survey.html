@@ -138,7 +138,7 @@
         <span class="publish-error">{{ publishError() }}</span>
       }
       <button class="publish-btn" type="button" (click)="onPublish()" [disabled]="isPublishing()" [style.cursor]="isPublishing() ? 'not-allowed' : 'pointer'">
-        {{ isPublishing() ? 'Publishing...' : 'Publish' }}
+        {{ isPublishing() ? (editId ? 'Updating...' : 'Publishing...') : (editId ? 'Update' : 'Publish') }}
         @if (!isPublishing()) {
           <img class="publish-btn__icon" src="icons/confinm.png" alt="" />
         }
