@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /create
+
+Sitemap: https://pollapp.dimit.cc/sitemap.xml
