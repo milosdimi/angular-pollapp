@@ -47,6 +47,7 @@ export class CreateSurvey implements OnInit {
       const survey = await this.supabase.getSurveyById(this.editId);
       this.patchForm(survey);
     } else {
+      this.questions.push(this.createQuestion());
       this.titleService.setTitle('Neue Umfrage erstellen – PollApp');
       this.metaService.updateTag({ name: 'description', content: 'Erstelle eine neue Umfrage mit Fragen und Antwortoptionen.' });
     }
@@ -59,14 +60,12 @@ export class CreateSurvey implements OnInit {
       end_date: survey.end_date ?? '',
       category: survey.category ?? '',
     });
-    this.questions.clear();
     for (const q of survey.questions) {
-      const qGroup = this.fb.group({
+      this.questions.push(this.fb.group({
         text: [q.text, Validators.required],
         allow_multiple: [q.allow_multiple],
         answers: this.fb.array(q.answers.map(a => this.fb.control(a.text, Validators.required))),
-      });
-      this.questions.push(qGroup);
+      }));
     }
   }
 
@@ -81,7 +80,7 @@ export class CreateSurvey implements OnInit {
     description: [''],
     end_date: ['', minDateValidator(this.today)],
     category: [''],
-    questions: this.fb.array([this.createQuestion()]),
+    questions: this.fb.array([]),
   });
 
   get questions(): FormArray {
