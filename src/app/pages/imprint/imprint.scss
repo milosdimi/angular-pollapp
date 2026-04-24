@@ -22,6 +22,11 @@
     font-weight: 400;
     color: var(--color-accent);
   }
+
+  &__title--de {
+    font-size: 2rem;
+    color: var(--color-text-muted);
+  }
 }
 
 .block {
@@ -37,11 +42,23 @@
     margin-bottom: 4px;
   }
 
+  &__heading--de {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
   p {
     font-family: var(--font-body);
     font-size: 0.95rem;
     color: var(--color-text-muted);
     line-height: 1.6;
+  }
+
+  &__de {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin-top: 2px;
   }
 }
 
