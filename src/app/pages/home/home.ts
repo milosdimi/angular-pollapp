@@ -7,10 +7,11 @@ import { SurveyList } from './survey-list/survey-list';
 import { Footer } from '../../components/footer/footer';
 import { Survey } from '../../models/survey.interface';
 import { SupabaseService } from '../../services/supabase.service';
+import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
   selector: 'app-home',
-  imports: [Navbar, Hero, EndingSoon, SurveyList, Footer],
+  imports: [Navbar, Hero, EndingSoon, SurveyList, Footer, Spinner],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

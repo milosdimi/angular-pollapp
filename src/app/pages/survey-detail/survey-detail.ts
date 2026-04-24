@@ -4,10 +4,11 @@ import { TitleCasePipe } from '@angular/common';
 import { Navbar } from '../../components/navbar/navbar';
 import { Survey, Question, Answer } from '../../models/survey.interface';
 import { SupabaseService } from '../../services/supabase.service';
+import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
   selector: 'app-survey-detail',
-  imports: [Navbar, TitleCasePipe],
+  imports: [Navbar, TitleCasePipe, Spinner],
   templateUrl: './survey-detail.html',
   styleUrl: './survey-detail.scss',
 })

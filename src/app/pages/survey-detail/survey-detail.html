@@ -3,7 +3,7 @@
     <app-navbar theme="light" [showCreateButton]="true" (createClick)="onCreateClick()" />
 
     @if (isLoading()) {
-      <p class="state-msg">Loading survey...</p>
+      <app-spinner />
     } @else if (loadError()) {
       <p class="state-msg state-msg--error">{{ loadError() }}</p>
     } @else if (survey()) {

@@ -6,7 +6,7 @@
       <h2 class="your-surveys__title">Your surveys</h2>
 
       @if (isLoading()) {
-        <p class="state-msg">Loading surveys...</p>
+        <app-spinner />
       } @else if (loadError()) {
         <p class="state-msg state-msg--error">{{ loadError() }}</p>
       } @else {
