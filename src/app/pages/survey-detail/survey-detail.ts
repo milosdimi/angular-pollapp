@@ -23,6 +23,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
   loadError = signal<string | null>(null);
   isVoting = signal(false);
   hasVoted = signal(false);
+  linkCopied = signal(false);
 
   private selections = signal<Map<number, Set<number>>>(new Map());
   private channel: any = null;
@@ -112,6 +113,12 @@ export class SurveyDetail implements OnInit, OnDestroy {
     const total = this.totalVotes(question);
     if (total === 0) return 0;
     return Math.round((answer.vote_count / total) * 100);
+  }
+
+  onShare(): void {
+    navigator.clipboard.writeText(window.location.href);
+    this.linkCopied.set(true);
+    setTimeout(() => this.linkCopied.set(false), 2000);
   }
 
   onCreateClick(): void {

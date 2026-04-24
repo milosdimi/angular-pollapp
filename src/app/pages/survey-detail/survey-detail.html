@@ -51,6 +51,9 @@
           </div>
 
           <div class="survey-panel__footer">
+            <button class="share-btn" (click)="onShare()">
+              {{ linkCopied() ? 'Link copied!' : 'Share survey' }}
+            </button>
             @if (hasVoted()) {
               <p class="voted-msg">Thank you for voting! 🎉</p>
             } @else {

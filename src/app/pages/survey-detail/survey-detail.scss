@@ -78,7 +78,8 @@
 
   &__footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -150,6 +151,25 @@
   font-size: 16px;
   font-weight: 600;
   color: #ee9236;
+}
+
+/* Share button */
+.share-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1.5px solid #8e7099;
+  color: var(--color-text-dark);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: #ee9236;
+    color: #ee9236;
+  }
 }
 
 /* Complete button */
