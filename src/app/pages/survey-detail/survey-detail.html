@@ -12,7 +12,9 @@
         <!-- Left panel -->
         <section class="survey-panel">
           <div class="survey-panel__top">
-            <span class="survey-panel__status">{{ survey()!.status | titlecase }}</span>
+            <span class="survey-panel__status" [class.survey-panel__status--past]="isPast()">
+              {{ isPast() ? 'Past' : (survey()!.status | titlecase) }}
+            </span>
             <div class="survey-panel__meta">
               <span>Ends on {{ survey()!.end_date | formatDate }}</span>
               <span>Category: {{ survey()!.category }}</span>
@@ -37,7 +39,7 @@
                         type="checkbox"
                         [id]="'a-' + answer.id"
                         [checked]="isSelected(question.id, answer.id)"
-                        [disabled]="hasVoted()"
+                        [disabled]="hasVoted() || isPast()"
                         (change)="toggleAnswer(question, answer.id)"
                       />
                       <label [for]="'a-' + answer.id">
@@ -54,7 +56,9 @@
             <button class="share-btn" (click)="onShare()">
               {{ linkCopied() ? 'Link copied!' : 'Share survey' }}
             </button>
-            @if (hasVoted()) {
+            @if (isPast()) {
+              <p class="voted-msg">This survey has ended.</p>
+            } @else if (hasVoted()) {
               <p class="voted-msg">Thank you for voting! 🎉</p>
             } @else {
               <button

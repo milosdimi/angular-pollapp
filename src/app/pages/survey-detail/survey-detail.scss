@@ -43,6 +43,11 @@
     padding: 3px 12px 3px 8px;
     border-radius: 0 14px 0 0;
     width: fit-content;
+
+    &--past {
+      background: var(--color-text-muted);
+      color: #ffffff;
+    }
   }
 
   &__meta {

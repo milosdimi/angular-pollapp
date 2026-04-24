@@ -30,6 +30,12 @@ export class SurveyDetail implements OnInit, OnDestroy {
 
   readonly LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+  isPast = computed(() => {
+    const end = this.survey()?.end_date;
+    if (!end) return false;
+    return new Date(end) < new Date();
+  });
+
   hasResults = computed(() => {
     const s = this.survey();
     if (!s) return false;
