@@ -12,9 +12,23 @@
         <!-- Left panel -->
         <section class="survey-panel">
           <div class="survey-panel__top">
-            <span class="survey-panel__status" [class.survey-panel__status--past]="isPast()">
-              {{ isPast() ? 'Past' : (survey()!.status | titlecase) }}
-            </span>
+            <div class="survey-panel__actions">
+              <span class="survey-panel__status" [class.survey-panel__status--past]="isPast()">
+                {{ isPast() ? 'Past' : (survey()!.status | titlecase) }}
+              </span>
+              <div class="action-btns">
+                <button class="action-btn action-btn--edit" (click)="onEdit()">Edit</button>
+                @if (showDeleteConfirm()) {
+                  <span class="delete-confirm">
+                    Sure?
+                    <button class="action-btn action-btn--confirm" (click)="onDeleteConfirm()" [disabled]="isDeleting()">Yes</button>
+                    <button class="action-btn action-btn--cancel" (click)="onDeleteCancel()">No</button>
+                  </span>
+                } @else {
+                  <button class="action-btn action-btn--delete" (click)="onDeleteClick()">Delete</button>
+                }
+              </div>
+            </div>
             <div class="survey-panel__meta">
               <span>Ends on {{ survey()!.end_date | formatDate }}</span>
               <span>Category: {{ survey()!.category }}</span>
@@ -53,9 +67,12 @@
           </div>
 
           <div class="survey-panel__footer">
-            <button class="share-btn" (click)="onShare()">
-              {{ linkCopied() ? 'Link copied!' : 'Share survey' }}
-            </button>
+            <div class="footer-left">
+              <button class="back-btn" (click)="goBack()">← Back</button>
+              <button class="share-btn" (click)="onShare()">
+                {{ linkCopied() ? 'Link copied!' : 'Share survey' }}
+              </button>
+            </div>
             @if (isPast()) {
               <p class="voted-msg">This survey has ended.</p>
             } @else if (hasVoted()) {

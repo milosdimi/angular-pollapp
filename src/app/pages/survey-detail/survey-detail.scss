@@ -50,6 +50,12 @@
     }
   }
 
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__meta {
     display: flex;
     justify-content: space-between;
@@ -156,6 +162,87 @@
   font-size: 16px;
   font-weight: 600;
   color: #ee9236;
+}
+
+/* Action buttons (Edit / Delete) */
+.action-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &--edit {
+    background: transparent;
+    border-color: #8e7099;
+    color: var(--color-text-dark);
+
+    &:hover { border-color: #ee9236; color: #ee9236; }
+  }
+
+  &--delete {
+    background: transparent;
+    border-color: #c0392b55;
+    color: #c0392b;
+
+    &:hover { background: #c0392b15; }
+  }
+
+  &--confirm {
+    background: #c0392b;
+    color: #fff;
+    border-color: #c0392b;
+
+    &:hover { background: #a93226; }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+
+  &--cancel {
+    background: transparent;
+    border-color: #8e7099;
+    color: var(--color-text-dark);
+
+    &:hover { border-color: #8e7099; background: #8e709920; }
+  }
+}
+
+.delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-dark);
+}
+
+/* Footer left group */
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover { color: var(--color-text-dark); }
 }
 
 /* Share button */

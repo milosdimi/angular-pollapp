@@ -27,6 +27,8 @@ export class SurveyDetail implements OnInit, OnDestroy {
   isVoting = signal(false);
   hasVoted = signal(false);
   linkCopied = signal(false);
+  showDeleteConfirm = signal(false);
+  isDeleting = signal(false);
 
   private selections = signal<Map<number, Set<number>>>(new Map());
   private channel: any = null;
@@ -124,6 +126,33 @@ export class SurveyDetail implements OnInit, OnDestroy {
     const total = this.totalVotes(question);
     if (total === 0) return 0;
     return Math.round((answer.vote_count / total) * 100);
+  }
+
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
+
+  onEdit(): void {
+    this.router.navigate(['/create'], { queryParams: { id: this.survey()!.id } });
+  }
+
+  onDeleteClick(): void {
+    this.showDeleteConfirm.set(true);
+  }
+
+  onDeleteCancel(): void {
+    this.showDeleteConfirm.set(false);
+  }
+
+  async onDeleteConfirm(): Promise<void> {
+    this.isDeleting.set(true);
+    try {
+      await this.supabase.deleteSurvey(this.survey()!.id);
+      this.router.navigate(['/']);
+    } catch (err) {
+      console.error('Delete failed:', err);
+      this.isDeleting.set(false);
+    }
   }
 
   onShare(): void {
