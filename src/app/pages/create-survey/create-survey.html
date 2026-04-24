@@ -29,9 +29,9 @@
                 <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
               </button>
             </div>
-            @if (form.get('title')?.invalid && form.get('title')?.touched) {
-              <span class="field-error">Survey name is required.</span>
-            }
+            <span class="field-error" [class.field-error--visible]="form.get('title')?.invalid && form.get('title')?.touched">
+              Survey name is required.
+            </span>
             <div class="bottom-row">
               <div class="field-sub">
                 <label class="field-label">Set end date <span class="optional">(optional)</span></label>
@@ -84,9 +84,9 @@
                   </button>
                 </div>
                 <input class="input" type="text" formControlName="text" placeholder="Which date would work best for you?" />
-                @if (questions.at(qi).get('text')?.invalid && questions.at(qi).get('text')?.touched) {
-                  <span class="field-error">Question text is required.</span>
-                }
+                <span class="field-error" [class.field-error--visible]="questions.at(qi).get('text')?.invalid && questions.at(qi).get('text')?.touched">
+                  Question text is required.
+                </span>
 
                 <div class="answers-header">
                   <span class="field-label">Answers</span>
