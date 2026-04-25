@@ -1,59 +1,229 @@
-# PollApp
+<div align="center">
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+# 📊 PollApp
 
-## Development server
+**A modern survey & polling web application built with Angular & Supabase**
 
-To start a local development server, run:
+[![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Supabase](https://img.shields.io/badge/Supabase-2.x-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
+[![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-```bash
-ng serve
+**[🌐 Live Demo → pollapp.dimit.cc](https://pollapp.dimit.cc)**
+
+</div>
+
+---
+
+## ✨ Features
+
+- 📋 **Browse surveys** — Active and past surveys with category filter & sorting
+- 🎯 **Vote on surveys** — Single or multiple choice answers per question
+- 📊 **Live results** — Real-time bar charts update as votes come in (Supabase Realtime)
+- ✏️ **Create & edit** — Full survey builder with questions, answers, end date and category
+- 🗑️ **Delete** — Remove your own surveys with confirmation dialog
+- 🔒 **No double voting** — LocalStorage prevents multiple votes per survey
+- 🔗 **Share** — Copy survey link to clipboard with one click
+- ⏰ **Ending soon** — Carousel of surveys expiring within 7 days
+- 🏷️ **Deadline badges** — Dynamic labels (e.g. "Ends in 3 days", "Ended")
+- 📱 **Fully responsive** — Optimized for mobile, tablet and desktop
+- 🎨 **Smooth transitions** — Page animations and micro-interactions
+- 🔍 **SEO ready** — `<title>` and `<meta description>` per route
+- 🗺️ **sitemap.xml + robots.txt** — Search engine optimized
+- ⚖️ **Legal** — Impressum & Datenschutzerklärung (DSGVO-konform)
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Framework** | [Angular 21](https://angular.dev) (standalone components, signals) |
+| **Language** | [TypeScript 5.9](https://www.typescriptlang.org) |
+| **Styling** | SCSS with CSS custom properties |
+| **Backend / DB** | [Supabase](https://supabase.com) (PostgreSQL) |
+| **Realtime** | Supabase Realtime (live vote updates) |
+| **Auth / Security** | Supabase Row Level Security |
+| **Fonts** | Mulish · Nokora · Nerko One |
+| **Testing** | Vitest |
+| **Formatter** | Prettier |
+| **Package Manager** | npm 11 |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── components/          # Shared UI components
+│   │   ├── navbar/
+│   │   ├── footer/
+│   │   ├── spinner/
+│   │   ├── survey-card/
+│   │   ├── highlight-card/
+│   │   └── deadline-badge/
+│   ├── pages/               # Route-level pages
+│   │   ├── home/            # Landing page
+│   │   │   ├── hero/
+│   │   │   ├── ending-soon/
+│   │   │   └── survey-list/
+│   │   ├── survey-detail/   # Vote + live results
+│   │   ├── create-survey/   # Create & edit surveys
+│   │   ├── imprint/
+│   │   ├── privacy/
+│   │   └── not-found/
+│   ├── services/
+│   │   └── supabase.service.ts
+│   ├── models/
+│   │   └── survey.interface.ts
+│   ├── pipes/
+│   │   └── format-date.pipe.ts
+│   └── environments/
+│       ├── environment.ts        # ⚠️ not in git
+│       └── environment.prod.ts   # ⚠️ not in git
+└── public/
+    ├── icons/
+    ├── logo/
+    └── fonts/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🗄️ Database Schema
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+```sql
+surveys
+  id · title · description · category · status · end_date · created_at
 
-```bash
-ng generate component component-name
+questions
+  id · survey_id (FK) · text · allow_multiple · order_index
+
+answers
+  id · question_id (FK) · text · vote_count
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js ≥ 20
+- npm ≥ 11
+- Angular CLI 21 — `npm install -g @angular/cli`
+- A [Supabase](https://supabase.com) project
+
+### Installation
 
 ```bash
-ng generate --help
+# 1. Clone the repository
+git clone https://github.com/milosdimi/PollApp.git
+cd PollApp
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment variables (see below)
+
+# 4. Start the dev server
+npm start
 ```
 
-## Building
+Open [http://localhost:4200](http://localhost:4200) in your browser.
 
-To build the project run:
+---
+
+## 🔑 Environment Variables
+
+Create `src/environments/environment.ts` (excluded from git):
+
+```typescript
+export const environment = {
+  production: false,
+  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
+  supabaseKey: 'YOUR_ANON_PUBLIC_KEY',
+};
+```
+
+Create `src/environments/environment.prod.ts` for production:
+
+```typescript
+export const environment = {
+  production: true,
+  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
+  supabaseKey: 'YOUR_ANON_PUBLIC_KEY',
+};
+```
+
+> ⚠️ Both files are in `.gitignore`. On your hosting provider, set these as environment variables.
+
+---
+
+## 📜 Available Scripts
 
 ```bash
-ng build
+npm start          # Dev server at localhost:4200
+npm run build      # Production build → dist/
+npm run watch      # Dev build with file watcher
+npm test           # Run tests with Vitest
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 🌍 Deployment
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Production Build
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+Output goes to `dist/poll-app/browser/`. Deploy this folder to any static hosting provider.
 
-For end-to-end (e2e) testing, run:
+### Hosting Options
 
-```bash
-ng e2e
+| Provider | Notes |
+|---|---|
+| **Netlify** | Drag & drop `dist/` folder or connect GitHub repo |
+| **Vercel** | `vercel --prod` after `npm run build` |
+| **Firebase Hosting** | `firebase deploy` |
+
+### SPA Routing
+
+All providers need a redirect rule so Angular's router handles navigation:
+
+**Netlify** — `public/_redirects`:
+```
+/*  /index.html  200
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📱 Responsive Breakpoints
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Breakpoint | Target |
+|---|---|
+| `> 1260px` | Large desktop |
+| `1260px – 1150px` | Small desktop / large laptop |
+| `1150px – 850px` | Tablet landscape / small laptop |
+| `≤ 850px` | Mobile |
+
+---
+
+## 🤝 Contributing
+
+This is a solo learning project built as part of the Developer Akademie curriculum. Feel free to fork and experiment!
+
+---
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+  Built with ❤️ by <a href="https://dimit.cc">milosdimi</a>
+</div>

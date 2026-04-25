@@ -72,3 +72,17 @@
     background: var(--color-accent-hover);
   }
 }
+
+@media (max-width: 850px) {
+  .code {
+    font-size: 5rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+
+    &--de {
+      font-size: 1.1rem;
+    }
+  }
+}

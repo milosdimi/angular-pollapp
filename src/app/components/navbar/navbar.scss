@@ -4,6 +4,10 @@
   justify-content: space-between;
   align-items: center;
 
+  @media (max-width: 850px) {
+    padding-top: 24px;
+  }
+
   &__logo img {
     width: 119px;
     height: 46px;
