@@ -84,7 +84,8 @@
                 [disabled]="isVoting()"
                 [style.cursor]="isVoting() ? 'not-allowed' : 'pointer'"
               >
-                {{ isVoting() ? 'Submitting...' : 'Complete survey' }}
+                {{ isVoting() ? 'Submitting...' : 'Complete' }}<span class="complete-btn__suffix"> survey</span>
+                <img class="complete-btn__icon" src="icons/check.png" alt="" />
               </button>
             }
           </div>
@@ -126,3 +127,4 @@
     }
   </div>
 </div>
+<app-footer />

@@ -558,6 +558,15 @@
     width: 100%;
     max-width: 280px;
     justify-content: center;
+
+    &__icon {
+      width: 18px;
+      opacity: 1;
+    }
+
+    &:hover {
+      background: #ffcfa1;
+    }
   }
 
   /* Field groups: label + delete on same row, input below */

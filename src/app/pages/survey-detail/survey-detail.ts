@@ -7,10 +7,11 @@ import { Survey, Question, Answer } from '../../models/survey.interface';
 import { SupabaseService } from '../../services/supabase.service';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormatDatePipe } from '../../pipes/format-date.pipe';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
   selector: 'app-survey-detail',
-  imports: [Navbar, TitleCasePipe, Spinner, FormatDatePipe],
+  imports: [Navbar, TitleCasePipe, Spinner, FormatDatePipe, Footer],
   templateUrl: './survey-detail.html',
   styleUrl: './survey-detail.scss',
 })
