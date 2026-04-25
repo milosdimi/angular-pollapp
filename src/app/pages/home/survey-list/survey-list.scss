@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+
+  @media (max-width: 850px) {
+    gap: 24px;
+  }
 }
 
 /* Filter bar */
@@ -42,6 +46,22 @@
   &__sort {
     position: relative;
   }
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 48px;
+
+    &__tabs {
+      gap: 16px;
+    }
+
+    &__tab {
+      width: auto;
+      height: 23px;
+      font-size: 14px;
+    }
+  }
 }
 
 /* Sort dropdown */
@@ -64,6 +84,7 @@
     &:hover {
       background: var(--color-bg-card-dark);
     }
+
   }
 
   &__arrow {
@@ -88,6 +109,11 @@
     flex-direction: column;
     gap: 4px;
     z-index: 10;
+
+    @media (max-width: 850px) {
+      position: static;
+      margin-top: 4px;
+    }
   }
 
   &__item {
@@ -133,6 +159,13 @@
       background: var(--color-accent);
       border-radius: 4px;
     }
+
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0;
+    }
   }
 
   &__empty {
@@ -141,5 +174,9 @@
     grid-column: span 2;
     text-align: center;
     padding: 32px 0;
+
+    @media (max-width: 850px) {
+      grid-column: span 1;
+    }
   }
 }
