@@ -4,6 +4,8 @@ import { Title, Meta } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
 import { Survey } from '../../models/survey.interface';
+import { Navbar } from '../../components/navbar/navbar';
+import { Footer } from '../../components/footer/footer';
 
 function minDateValidator(min: string) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -25,7 +27,7 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 @Component({
   selector: 'app-create-survey',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Navbar, Footer],
   templateUrl: './create-survey.html',
   styleUrl: './create-survey.scss',
 })

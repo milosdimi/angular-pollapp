@@ -1,3 +1,7 @@
+<div class="container">
+  <app-navbar theme="dark" />
+</div>
+
 <div class="page">
   <div class="card" [formGroup]="form">
 
@@ -8,7 +12,8 @@
         <div class="card__title-row">
           <h1 class="card__title">Create new survey</h1>
           <button class="cancel-btn" type="button" (click)="onCancel()">
-            Cancel <span>✕</span>
+            <span class="cancel-btn__text">Cancel</span>
+            <img class="cancel-btn__icon" src="icons/close.png" alt="Close" />
           </button>
         </div>
       </div>
@@ -147,6 +152,8 @@
 
   </div>
 </div>
+
+<app-footer />
 
 @if (showPublishedOverlay()) {
   <div class="overlay">

@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: var(--color-bg-dark);
-  padding: 72px 24px 80px;
+  padding: 40px 16px 80px;
 }
 
 .card {
@@ -65,6 +65,13 @@
   border: none;
   cursor: pointer;
   transition: background 0.2s ease;
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+  }
 
   &:hover {
     background: #ffb77080;
@@ -467,6 +474,165 @@
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+  }
+}
+
+/* ── Mobile ─────────────────────────────── */
+@media (max-width: 850px) {
+  .page {
+    padding: 24px 0px 60px;
+  }
+
+  .card {
+    padding: 24px 20px;
+    gap: 32px;
+
+    /* Draft links + X rechts auf einer Zeile, Titel darunter */
+    &__header-left {
+      position: relative;
+    }
+
+    &__title {
+      font-size: 2.5rem;
+    }
+
+    &__footer {
+      justify-content: center;
+    }
+  }
+
+  /* Cancel button: icon only, pinned top-right */
+  .cancel-btn {
+    position: absolute;
+    top: 0;
+    right: 24px;
+    width: 39px;
+    height: 32px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    justify-content: center;
+
+    &__text {
+      display: none;
+    }
+  }
+
+  .form-area {
+    padding: 24px 16px;
+    border-radius: 5px 40px 5px 5px;
+  }
+
+  /* Top-row: 2 Spalten → 1 Spalte */
+  .top-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* End-date + Category untereinander */
+  .bottom-row {
+    flex-direction: column;
+  }
+
+  .input--short {
+    width: 100%;
+  }
+
+  /* Questions: 2 Spalten → 1 Spalte */
+  .questions-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  /* "Add next question" zentriert */
+  .add-question-cell {
+    justify-content: center;
+  }
+
+  .add-question-btn {
+    width: 100%;
+    justify-content: center;
+    max-width: 280px;
+  }
+
+  /* Publish-Button zentriert + etwas breiter */
+  .publish-btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  /* Field groups: label + delete on same row, input below */
+  .field-group {
+    display: grid;
+    grid-template-columns: 1fr 26px;
+    column-gap: 8px;
+    row-gap: 4px;
+
+    & > .field-label {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    & > .input-row {
+      display: contents;
+
+      .input {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .input--textarea {
+        align-self: stretch;
+      }
+
+      .delete-btn {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+        justify-self: end;
+      }
+    }
+
+    & > .field-error {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+
+    & > .bottom-row {
+      grid-column: 1 / -1;
+      grid-row: 4;
+    }
+  }
+
+  /* Answers: letter + delete on top row, input full-width below */
+  .answer-row {
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+
+    .answer-letter {
+      flex: 1;
+      order: 1;
+    }
+
+    .delete-btn {
+      order: 2;
+    }
+
+    .input {
+      order: 3;
+      flex-basis: 100%;
+      margin-top: 4px;
+    }
+  }
+
+  /* Add answer: hint above button */
+  .add-answer-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    .add-answer-btn { order: 2; }
+    .add-answer-hint { order: 1; }
   }
 }
 
