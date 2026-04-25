@@ -18,6 +18,11 @@
   --color-bg-card-light: #ffffff;
   --color-bg-light: #f5f0ff;
 
+  /* Surface colors for components */
+  --color-bg-surface: #35273a;
+  --color-bg-survey-panel: rgba(142, 112, 153, 0.10);
+  --color-bg-form-area: rgba(142, 112, 153, 0.16);
+
   --color-accent: #ffb770;
   --color-accent-hover: #ffcfa1;
 
@@ -50,6 +55,19 @@ body {
   font-family: var(--font-body);
   background-color: var(--color-bg-dark);
   color: var(--color-text-primary);
+}
+
+/* ── Light mode ──────────────────────────── */
+body.light-mode {
+  --color-bg-dark: #f2ecfc;
+  --color-bg-card-dark: #e4daf0;
+  --color-bg-card-light: #faf5ff;
+  --color-bg-light: #f2ecfc;
+  --color-bg-surface: #ddd5ea;
+  --color-bg-survey-panel: #d8ceea;
+  --color-bg-form-area: #cfc4e0;
+  --color-text-primary: #2d2040;
+  --color-text-muted: #7a6589;
 }
 
 .container {

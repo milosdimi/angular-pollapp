@@ -7,7 +7,7 @@
 .card {
   max-width: 1218px;
   margin: 0 auto;
-  background: #35273a;
+  background: var(--color-bg-surface);
   border-radius: 5px 100px 5px 5px;
   padding: 40px 54px;
   display: flex;
@@ -80,7 +80,7 @@
 
 /* Form area */
 .form-area {
-  background: #8e709929;
+  background: var(--color-bg-form-area);
   border-radius: 5px 80px 5px 5px;
   padding: 40px 32px;
 
@@ -157,7 +157,8 @@
   }
 
   &:focus {
-    outline: 2px solid var(--color-accent);
+    outline: none;
+    background: #fee9d4;
   }
 
   &.ng-invalid.ng-touched {

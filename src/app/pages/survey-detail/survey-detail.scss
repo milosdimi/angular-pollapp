@@ -1,5 +1,5 @@
 .page {
-  background-color: var(--color-bg-light);
+  background-color: var(--color-bg-dark);
   min-height: 100vh;
   color: var(--color-text-dark);
 
@@ -20,7 +20,7 @@
 .survey-panel {
   width: 702px;
   flex-shrink: 0;
-  background: #8e709919;
+  background: var(--color-bg-survey-panel);
   border-radius: 0 160px 0 0;
   padding: 40px;
   display: flex;
@@ -63,7 +63,7 @@
     font-family: var(--font-body);
     font-size: 14px;
     font-weight: 500;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
   }
 
   &__title {
@@ -79,7 +79,7 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 100%;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
   }
 
   &__questions {
@@ -106,7 +106,7 @@
     font-family: var(--font-body);
     font-size: 16px;
     font-weight: 700;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
   }
 
   &__hint {
@@ -141,7 +141,7 @@
       font-family: var(--font-body);
       font-size: 14px;
       font-weight: 500;
-      color: var(--color-text-dark);
+      color: var(--color-text-primary);
       cursor: pointer;
       line-height: 1.4;
     }
@@ -151,7 +151,7 @@
 .state-msg {
   font-family: var(--font-body);
   font-size: 16px;
-  color: var(--color-text-dark);
+  color: var(--color-text-primary);
   text-align: center;
   padding: 80px 0;
 
@@ -185,7 +185,7 @@
   &--edit {
     background: transparent;
     border-color: #8e7099;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
 
     &:hover { border-color: #ee9236; color: #ee9236; }
   }
@@ -210,7 +210,7 @@
   &--cancel {
     background: transparent;
     border-color: #8e7099;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
 
     &:hover { border-color: #8e7099; background: #8e709920; }
   }
@@ -222,7 +222,7 @@
   gap: 6px;
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--color-text-dark);
+  color: var(--color-text-primary);
 }
 
 /* Footer left group */
@@ -243,7 +243,7 @@
   cursor: pointer;
   transition: color 0.2s ease;
 
-  &:hover { color: var(--color-text-dark); }
+  &:hover { color: var(--color-text-primary); }
 }
 
 /* Share button */
@@ -251,7 +251,7 @@
   padding: 10px 20px;
   background: transparent;
   border: 1.5px solid #8e7099;
-  color: var(--color-text-dark);
+  color: var(--color-text-primary);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 14px;
@@ -385,7 +385,7 @@
     font-family: var(--font-display);
     font-size: 2rem;
     font-weight: 400;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
   }
 
   &__live {
@@ -396,7 +396,7 @@
     font-family: var(--font-body);
     font-size: 16px;
     font-weight: 500;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
   }
 
   &__no-answers {
@@ -416,7 +416,7 @@
     font-family: var(--font-body);
     font-size: 16px;
     font-weight: 700;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
   }
 }
 
@@ -429,7 +429,7 @@
     font-family: var(--font-body);
     font-size: 14px;
     font-weight: 600;
-    color: var(--color-text-dark);
+    color: var(--color-text-primary);
     width: 16px;
   }
 

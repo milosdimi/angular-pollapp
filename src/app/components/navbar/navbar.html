@@ -1,14 +1,23 @@
 <nav class="navbar">
   <a routerLink="/" class="navbar__logo">
     <img
-      [src]="theme() === 'dark' ? 'logo/logo-orange.png' : 'logo/logo-purple-dark.png'"
+      [src]="isDark() ? 'logo/logo-orange.png' : 'logo/logo-purple-dark.png'"
       alt="Poll App Logo"
     />
   </a>
-  @if (showCreateButton()) {
-    <button class="navbar__create-btn" (click)="createClick.emit()">
-      <span>Create survey</span>
-      <img class="navbar__create-icon" src="icons/add_circle.png" alt="" />
+  <div class="navbar__right">
+    <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'">
+      <span class="theme-toggle__track" [class.theme-toggle__track--light]="!isDark()">
+        <span class="theme-toggle__thumb">
+          <span class="theme-toggle__icon">{{ isDark() ? '🌙' : '☀️' }}</span>
+        </span>
+      </span>
     </button>
-  }
+    @if (showCreateButton()) {
+      <button class="navbar__create-btn" (click)="createClick.emit()">
+        <span>Create survey</span>
+        <img class="navbar__create-icon" src="icons/add_circle.png" alt="" />
+      </button>
+    }
+  </div>
 </nav>

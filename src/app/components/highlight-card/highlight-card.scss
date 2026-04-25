@@ -1,5 +1,5 @@
 .card {
-  background-color: var(--color-bg-card-light);
+  background-color: #faf5fe;
   border-radius: 0 80px 0 0;
   padding: 40px 18px;
   cursor: pointer;
@@ -8,10 +8,10 @@
   gap: 10px;
   width: 321px;
   min-height: 310px;
-  transition: opacity 0.2s ease;
+  transition: background-color 0.2s ease;
 
   &:hover {
-    opacity: 0.9;
+    background-color: #f4e9fb;
   }
 
   @media (max-width: 1100px) {
