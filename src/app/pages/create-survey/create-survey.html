@@ -13,7 +13,7 @@
           <h1 class="card__title">Create new survey</h1>
           <button class="cancel-btn" type="button" (click)="onCancel()">
             <span class="cancel-btn__text">Cancel</span>
-            <img class="cancel-btn__icon" src="icons/close.png" alt="Close" />
+            <img class="cancel-btn__icon" src="svgs/x.svg" alt="Close" />
           </button>
         </div>
       </div>
@@ -30,8 +30,7 @@
             <div class="input-row">
               <input class="input" type="text" formControlName="title" />
               <button class="delete-btn" type="button" (click)="form.patchValue({title: ''})">
-                <img class="icon-normal" src="icons/delete.png" alt="Delete" />
-                <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                <svg class="delete-btn__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
               </button>
             </div>
             <span class="field-error" [class.field-error--visible]="form.get('title')?.invalid && form.get('title')?.touched">
@@ -43,15 +42,14 @@
                 <div class="input-row">
                   <input class="input input--short" type="date" formControlName="end_date" [min]="today" (blur)="onDateBlur()" />
                   <button class="delete-btn" type="button" (click)="form.patchValue({end_date: ''})">
-                    <img class="icon-normal" src="icons/delete.png" alt="Delete" />
-                    <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                    <svg class="delete-btn__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
                   </button>
                 </div>
               </div>
               <div class="category-select">
                 <button class="category-trigger" type="button" (click)="categoryOpen = !categoryOpen">
                   <span>{{ form.value.category || 'Choose category' }}</span>
-                  <span class="arrow" [class.arrow--open]="categoryOpen">▼</span>
+                  <svg class="arrow" [class.arrow--open]="categoryOpen" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M236.8,188.09L149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.34,24.34,0,0,0,40.55,224h174.9a24.34,24.34,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09Z"/></svg>
                 </button>
                 @if (categoryOpen) {
                   <ul class="category-dropdown">
@@ -69,8 +67,7 @@
             <div class="input-row">
               <textarea class="input input--textarea" formControlName="description"></textarea>
               <button class="delete-btn" type="button" (click)="form.patchValue({description: ''})">
-                <img class="icon-normal" src="icons/delete.png" alt="Delete" />
-                <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                <svg class="delete-btn__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
               </button>
             </div>
           </div>
@@ -84,8 +81,7 @@
                 <div class="question-block__header">
                   <strong class="question-block__num">{{ qi + 1 }}. Question</strong>
                   <button class="delete-btn" type="button" (click)="qi === 0 ? clearQuestion(0) : removeQuestion(qi)">
-                    <img class="icon-normal" src="icons/delete.png" alt="Delete" />
-                    <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                    <svg class="delete-btn__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
                   </button>
                 </div>
                 <input class="input" type="text" formControlName="text" placeholder="Which date would work best for you?" />
@@ -107,8 +103,7 @@
                       <span class="answer-letter">{{ LETTERS[j] }}.</span>
                       <input class="input" type="text" [formControlName]="j" />
                       <button class="delete-btn" type="button" (click)="removeAnswer(qi, j)">
-                        <img class="icon-normal" src="icons/delete.png" alt="Delete" />
-                        <img class="icon-hover" src="icons/delete-hover.png" alt="Delete" />
+                        <svg class="delete-btn__icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
                       </button>
                     </div>
                   }
@@ -117,7 +112,7 @@
                 <div class="add-answer-row">
                   <button class="add-answer-btn" type="button" (click)="addAnswer(qi)">
                     <span>Add answer</span>
-                    <img src="icons/add_circle.png" alt="" />
+                    <img src="svgs/plus-circle.svg" alt="" />
                   </button>
                   @if (answersOf(qi).length > 2) {
                     <span class="add-answer-hint">You can add up to 6 answer fields.</span>
@@ -129,7 +124,7 @@
             <div class="add-question-cell">
               <button class="add-question-btn" type="button" (click)="addQuestion()">
                 Add next question
-                <img src="icons/add_circle.png" alt="" />
+                <img src="svgs/plus-circle.svg" alt="" />
               </button>
             </div>
           </div>
@@ -145,7 +140,7 @@
       <button class="publish-btn" type="button" (click)="onPublish()" [disabled]="isPublishing()" [style.cursor]="isPublishing() ? 'not-allowed' : 'pointer'">
         {{ isPublishing() ? (editId ? 'Updating...' : 'Publishing...') : (editId ? 'Update' : 'Publish') }}
         @if (!isPublishing()) {
-          <img class="publish-btn__icon" src="icons/check.png" alt="check img" />
+          <img class="publish-btn__icon" src="svgs/check.svg" alt="" />
         }
       </button>
     </div>

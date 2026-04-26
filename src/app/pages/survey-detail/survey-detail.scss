@@ -127,6 +127,13 @@
     display: flex;
     align-items: flex-start;
     gap: 10px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+
+    &:has(input:not(:disabled)):hover {
+      background: rgba(255, 207, 161, 0.6);
+    }
 
     input[type='checkbox'] {
       width: 16px;
@@ -159,10 +166,19 @@
 }
 
 .voted-msg {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 600;
   color: #ee9236;
+}
+
+.voted-icon {
+  width: 18px;
+  height: 18px;
+  filter: invert(60%) sepia(80%) saturate(700%) hue-rotate(350deg) brightness(105%);
 }
 
 /* Action buttons (Edit / Delete) */
@@ -233,6 +249,9 @@
 }
 
 .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 16px;
   background: transparent;
   border: none;
@@ -286,6 +305,7 @@
     height: 16px;
     display: none;
     flex-shrink: 0;
+    filter: brightness(0);
   }
 
   &:hover {
