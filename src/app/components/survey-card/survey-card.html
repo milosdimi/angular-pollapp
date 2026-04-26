@@ -1,4 +1,4 @@
-<article class="card" (click)="onClick()">
+<article class="card" [class.card--past]="isPast()" (click)="onClick()">
   @if (survey().category) {
     <span class="category">
       <img class="category__icon" [src]="categoryIcon(survey().category!)" alt="" />

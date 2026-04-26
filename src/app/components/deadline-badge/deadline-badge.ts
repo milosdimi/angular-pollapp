@@ -1,5 +1,7 @@
 import { Component, input, computed } from '@angular/core';
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
 @Component({
   selector: 'app-deadline-badge',
   imports: [],
@@ -13,7 +15,7 @@ export class DeadlineBadge {
     const date = this.endDate();
     if (!date) return null;
     const diff = new Date(date).getTime() - new Date().getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return Math.ceil(diff / MS_PER_DAY);
   });
 
   label = computed(() => {

@@ -175,10 +175,10 @@ export class CreateSurvey implements OnInit {
       description: v.description,
       end_date: v.end_date,
       category: v.category,
-      questions: v.questions.map((q: any) => ({
-        text: q.text,
-        allow_multiple: q.allow_multiple,
-        answers: q.answers.filter((a: string) => a.trim() !== ''),
+      questions: (v.questions as Array<{ text: string | null; allow_multiple: boolean | null; answers: (string | null)[] }>).map((q) => ({
+        text: q.text ?? '',
+        allow_multiple: q.allow_multiple ?? false,
+        answers: (q.answers ?? []).filter((a): a is string => a !== null && a.trim() !== ''),
       })),
     };
 
@@ -190,9 +190,9 @@ export class CreateSurvey implements OnInit {
       }
       this.showPublishedOverlay.set(true);
       setTimeout(() => this.closeOverlay(), 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Publish failed:', err);
-      this.publishError.set(err?.message ?? 'Something went wrong. Please try again.');
+      this.publishError.set(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       this.isPublishing.set(false);
     }

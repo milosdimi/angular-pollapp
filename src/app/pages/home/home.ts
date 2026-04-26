@@ -39,8 +39,8 @@ export class Home implements OnInit {
     try {
       const data = await this.supabase.getSurveys();
       this.surveys.set(data);
-    } catch (err: any) {
-      this.loadError.set(err?.message ?? 'Could not load surveys.');
+    } catch (err: unknown) {
+      this.loadError.set(err instanceof Error ? err.message : 'Could not load surveys.');
     } finally {
       this.isLoading.set(false);
     }

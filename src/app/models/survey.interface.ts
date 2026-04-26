@@ -19,7 +19,7 @@ export interface Survey {
   description: string | null;
   category: string | null;
   end_date: string | null;
-  status: 'published' | 'draft';
+  status: 'published' | 'draft' | 'past';
   created_at: string;
   questions: Question[];
 }

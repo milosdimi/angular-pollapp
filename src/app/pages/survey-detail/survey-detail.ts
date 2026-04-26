@@ -32,7 +32,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
   isDeleting = signal(false);
 
   private selections = signal<Map<number, Set<number>>>(new Map());
-  private channel: any = null;
+  private channel: ReturnType<typeof this.supabase.subscribeToAnswers> | null = null;
 
   readonly LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -65,8 +65,8 @@ export class SurveyDetail implements OnInit, OnDestroy {
       this.survey.set(data);
       this.titleService.setTitle(`${data.title} – PollApp`);
       this.metaService.updateTag({ name: 'description', content: data.description ?? 'Nimm an dieser Umfrage teil und sieh die Ergebnisse in Echtzeit.' });
-    } catch (err: any) {
-      this.loadError.set(err?.message ?? 'Could not load survey.');
+    } catch (err: unknown) {
+      this.loadError.set(err instanceof Error ? err.message : 'Could not load survey.');
     } finally {
       this.isLoading.set(false);
     }

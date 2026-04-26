@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Survey } from '../../models/survey.interface';
 import { DeadlineBadge } from '../deadline-badge/deadline-badge';
 
@@ -21,11 +21,16 @@ export class SurveyCard {
   survey = input.required<Survey>();
   cardClick = output<number>();
 
+  isPast = computed(() => {
+    const end = this.survey().end_date;
+    return !!end && new Date(end) < new Date();
+  });
+
   categoryIcon(category: string): string {
     return CATEGORY_ICONS[category] ?? 'svgs/clipboard-text.svg';
   }
 
   onClick(): void {
-    this.cardClick.emit(this.survey().id);
+    if (!this.isPast()) this.cardClick.emit(this.survey().id);
   }
 }

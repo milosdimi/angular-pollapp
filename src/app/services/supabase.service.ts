@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
-import { Survey } from '../models/survey.interface';
+import { Answer, Question, Survey } from '../models/survey.interface';
 
+type RawAnswer = Answer & { order_index: number };
+type RawQuestion = Omit<Question, 'answers'> & { order_index: number; answers: RawAnswer[] };
+type RawSurvey = Omit<Survey, 'questions'> & { questions: RawQuestion[] };
+
+/** Wraps all Supabase database and realtime operations for the PollApp. */
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
   private client: SupabaseClient = createClient(
@@ -10,17 +15,19 @@ export class SupabaseService {
     environment.supabaseKey
   );
 
+  /** Returns all published and past surveys ordered by creation date. */
   async getSurveys(): Promise<Survey[]> {
     const { data, error } = await this.client
       .from('surveys')
       .select(`*, questions(*, answers(*))`)
-      .eq('status', 'published')
+      .in('status', ['published', 'past'])
       .order('created_at', { ascending: false });
 
     if (error) throw error;
     return (data ?? []).map(this.mapSurvey);
   }
 
+  /** Returns a single survey by its numeric ID, including questions and answers. */
   async getSurveyById(id: number): Promise<Survey> {
     const { data, error } = await this.client
       .from('surveys')
@@ -32,6 +39,7 @@ export class SupabaseService {
     return this.mapSurvey(data);
   }
 
+  /** Inserts a new survey with its questions and answers; returns the new survey ID. */
   async createSurvey(payload: {
     title: string;
     description: string;
@@ -76,12 +84,14 @@ export class SupabaseService {
     return survey.id;
   }
 
+  /** Deletes a survey and all its questions and answers by survey ID. */
   async deleteSurvey(id: number): Promise<void> {
     await this.deleteQuestionsAndAnswers(id);
     const { error } = await this.client.from('surveys').delete().eq('id', id);
     if (error) throw error;
   }
 
+  /** Replaces a survey's metadata and all its questions/answers in one atomic sequence. */
   async updateSurvey(id: number, payload: {
     title: string;
     description: string;
@@ -118,11 +128,13 @@ export class SupabaseService {
     }
   }
 
+  /** Increments the vote count for a single answer via an RPC call. */
   async vote(answerId: number): Promise<void> {
     const { error } = await this.client.rpc('increment_vote', { answer_id: answerId });
     if (error) throw error;
   }
 
+  /** Opens a realtime channel that calls `callback` whenever an answer row is updated. */
   subscribeToAnswers(surveyId: number, callback: () => void) {
     return this.client
       .channel(`survey-${surveyId}`)
@@ -130,6 +142,7 @@ export class SupabaseService {
       .subscribe();
   }
 
+  /** Removes the given realtime channel to prevent memory leaks. */
   unsubscribe(channel: ReturnType<typeof this.client.channel>): void {
     this.client.removeChannel(channel);
   }
@@ -139,20 +152,20 @@ export class SupabaseService {
       .from('questions').select('id').eq('survey_id', surveyId);
 
     if (questions?.length) {
-      const ids = questions.map((q: any) => q.id);
+      const ids = questions.map((q: { id: number }) => q.id);
       await this.client.from('answers').delete().in('question_id', ids);
       await this.client.from('questions').delete().eq('survey_id', surveyId);
     }
   }
 
-  private mapSurvey(raw: any): Survey {
+  private mapSurvey(raw: RawSurvey): Survey {
     return {
       ...raw,
       questions: (raw.questions ?? [])
-        .sort((a: any, b: any) => a.order_index - b.order_index)
-        .map((q: any) => ({
+        .sort((a, b) => a.order_index - b.order_index)
+        .map((q) => ({
           ...q,
-          answers: (q.answers ?? []).sort((a: any, b: any) => a.order_index - b.order_index),
+          answers: (q.answers ?? []).sort((a, b) => a.order_index - b.order_index),
         })),
     };
   }
