@@ -21,7 +21,9 @@
     <div class="filter-bar__sort">
       <button class="sort__trigger" (click)="toggleDropdown()">
         <span>{{ selectedCategory() ?? 'Sort by categories' }}</span>
-        <span class="sort__arrow" [class.sort__arrow--open]="dropdownOpen()">▼</span>
+        <svg class="sort__arrow" [class.sort__arrow--open]="dropdownOpen()" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" aria-hidden="true">
+          <path fill="currentColor" d="M236.8,188.09L149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.34,24.34,0,0,0,40.55,224h174.9a24.34,24.34,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09Z"/>
+        </svg>
       </button>
       @if (dropdownOpen()) {
         <ul class="sort__dropdown">

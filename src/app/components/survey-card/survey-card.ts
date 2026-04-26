@@ -3,12 +3,12 @@ import { Survey } from '../../models/survey.interface';
 import { DeadlineBadge } from '../deadline-badge/deadline-badge';
 
 const CATEGORY_ICONS: Record<string, string> = {
-  'Team Activities': '🤝',
-  'Health & Wellness': '🌿',
-  'Gaming & Entertainment': '🎮',
-  'Education & Learning': '📚',
-  'Lifestyle & Preferences': '✨',
-  'Technology & Innovation': '💡',
+  'Team Activities': 'svgs/handshake.svg',
+  'Health & Wellness': 'svgs/leaf.svg',
+  'Gaming & Entertainment': 'svgs/game-controller.svg',
+  'Education & Learning': 'svgs/book-open-text.svg',
+  'Lifestyle & Preferences': 'svgs/sparkle.svg',
+  'Technology & Innovation': 'svgs/lightbulb.svg',
 };
 
 @Component({
@@ -22,7 +22,7 @@ export class SurveyCard {
   cardClick = output<number>();
 
   categoryIcon(category: string): string {
-    return CATEGORY_ICONS[category] ?? '📋';
+    return CATEGORY_ICONS[category] ?? 'svgs/clipboard-text.svg';
   }
 
   onClick(): void {

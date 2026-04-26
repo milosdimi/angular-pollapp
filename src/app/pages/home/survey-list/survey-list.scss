@@ -88,12 +88,24 @@
   }
 
   &__arrow {
-    font-size: 10px;
-    transition: transform 0.2s ease;
+    width: 14px;
+    height: 14px;
+    transform: rotate(180deg);
+    color: rgba(255, 255, 255, 0.7);
+    transition: transform 0.2s ease, color 0.2s ease;
+
+    body.light-mode & {
+      color: var(--color-text-dark);
+    }
 
     &--open {
-      transform: rotate(180deg);
+      transform: rotate(0deg);
+      color: var(--color-accent);
     }
+  }
+
+  &__trigger:hover .sort__arrow:not(.sort__arrow--open) {
+    color: var(--color-accent);
   }
 
   &__dropdown {

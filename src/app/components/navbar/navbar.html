@@ -9,14 +9,14 @@
     <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'">
       <span class="theme-toggle__track" [class.theme-toggle__track--light]="!isDark()">
         <span class="theme-toggle__thumb">
-          <span class="theme-toggle__icon">{{ isDark() ? '🌙' : '☀️' }}</span>
+          <img [src]="isDark() ? 'svgs/moon.svg' : 'svgs/sun.svg'" alt="" class="theme-toggle__icon" />
         </span>
       </span>
     </button>
     @if (showCreateButton()) {
       <button class="navbar__create-btn" (click)="createClick.emit()">
         <span>Create survey</span>
-        <img class="navbar__create-icon" src="icons/add_circle.png" alt="" />
+        <img class="navbar__create-icon" src="svgs/plus-circle.svg" alt="" />
       </button>
     }
   </div>

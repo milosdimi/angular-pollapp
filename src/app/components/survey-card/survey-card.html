@@ -1,7 +1,7 @@
 <article class="card" (click)="onClick()">
   @if (survey().category) {
     <span class="category">
-      <span class="category__icon">{{ categoryIcon(survey().category!) }}</span>
+      <img class="category__icon" [src]="categoryIcon(survey().category!)" alt="" />
       {{ survey().category }}
     </span>
   }

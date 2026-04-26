@@ -89,8 +89,9 @@
   }
 
   &__icon {
-    font-size: 11px;
-    line-height: 1;
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
   }
 
   &__track--light &__thumb {

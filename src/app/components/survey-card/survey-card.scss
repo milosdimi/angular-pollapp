@@ -31,7 +31,13 @@
   color: var(--color-text-orange);
 
   &__icon {
-    font-size: 14px;
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+
+    body.light-mode & {
+      filter: brightness(0);
+    }
   }
 }
 
