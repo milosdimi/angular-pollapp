@@ -1,0 +1,21 @@
+{
+  "name": "Poll App",
+  "short_name": "Poll App",
+  "icons": [
+    {
+      "src": "/icons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#ffb770",
+  "background_color": "#2d2040",
+  "display": "standalone"
+}
