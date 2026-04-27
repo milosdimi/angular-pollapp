@@ -1,5 +1,11 @@
-.page {
+:host {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.page {
+  flex: 1;
   background: var(--color-bg-dark);
 
   &__inner {

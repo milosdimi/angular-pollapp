@@ -1,6 +1,12 @@
-.page {
-  background-color: var(--color-bg-dark);
+:host {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.page {
+  flex: 1;
+  background-color: var(--color-bg-dark);
   color: var(--color-text-dark);
 
   &__inner {
