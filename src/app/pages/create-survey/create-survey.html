@@ -47,14 +47,16 @@
                 </div>
               </div>
               <div class="category-select">
-                <button class="category-trigger" type="button" (click)="categoryOpen = !categoryOpen">
+                <button class="category-trigger" type="button" (click)="categoryOpen = !categoryOpen" [attr.aria-expanded]="categoryOpen">
                   <span>{{ form.value.category || 'Choose category' }}</span>
                   <svg class="arrow" [class.arrow--open]="categoryOpen" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" aria-hidden="true"><path fill="currentColor" d="M236.8,188.09L149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.34,24.34,0,0,0,40.55,224h174.9a24.34,24.34,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09Z"/></svg>
                 </button>
                 @if (categoryOpen) {
-                  <ul class="category-dropdown">
+                  <ul class="category-dropdown" role="menu">
                     @for (cat of categories; track cat) {
-                      <li class="category-item" (click)="selectCategory(cat)">{{ cat }}</li>
+                      <li class="category-item" role="menuitem" tabindex="0"
+                        (click)="selectCategory(cat)"
+                        (keydown.enter)="selectCategory(cat)">{{ cat }}</li>
                     }
                   </ul>
                 }
