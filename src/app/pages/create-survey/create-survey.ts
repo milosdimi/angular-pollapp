@@ -14,6 +14,11 @@ function minDateValidator(min: string) {
   };
 }
 
+function nonBlankRequired(control: AbstractControl): ValidationErrors | null {
+  const v = control.value as string | null;
+  return v && v.trim().length > 0 ? null : { required: true };
+}
+
 const CATEGORIES: string[] = [
   'Team Activities',
   'Health & Wellness',
@@ -66,7 +71,7 @@ export class CreateSurvey implements OnInit {
       this.questions.push(this.fb.group({
         text: [q.text, Validators.required],
         allow_multiple: [q.allow_multiple],
-        answers: this.fb.array(q.answers.map(a => this.fb.control(a.text, Validators.required))),
+        answers: this.fb.array(q.answers.map(a => this.fb.control(a.text, nonBlankRequired))),
       }));
     }
   }
@@ -116,7 +121,7 @@ export class CreateSurvey implements OnInit {
   }
 
   createAnswer() {
-    return this.fb.control('', Validators.required);
+    return this.fb.control('', nonBlankRequired);
   }
 
   addQuestion(): void {

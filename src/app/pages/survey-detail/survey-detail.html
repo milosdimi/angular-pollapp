@@ -90,6 +90,9 @@
                 {{ isVoting() ? 'Submitting...' : 'Complete' }}<span class="complete-btn__suffix"> survey</span>
                 <img class="complete-btn__icon" src="svgs/check.svg" alt="" />
               </button>
+              @if (voteError()) {
+                <p class="vote-error">{{ voteError() }}</p>
+              }
             }
           </div>
         </section>

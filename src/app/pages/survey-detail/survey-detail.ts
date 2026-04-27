@@ -27,6 +27,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
   loadError = signal<string | null>(null);
   isVoting = signal(false);
   hasVoted = signal(false);
+  voteError = signal<string | null>(null);
   linkCopied = signal(false);
   showDeleteConfirm = signal(false);
   isDeleting = signal(false);
@@ -94,6 +95,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
   async onComplete(): Promise<void> {
     if (this.isVoting() || this.hasVoted()) return;
     this.isVoting.set(true);
+    this.voteError.set(null);
     try {
       const allSelected = [...this.selections().values()].flatMap(s => [...s]);
       await Promise.all(allSelected.map(id => this.supabase.vote(id)));
@@ -101,7 +103,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
       this.markVotedFor(surveyId);
       this.hasVoted.set(true);
     } catch {
-      // vote failure is silent; the UI remains interactive so the user can retry
+      this.voteError.set('Voting failed. Please try again.');
     } finally {
       this.isVoting.set(false);
     }
