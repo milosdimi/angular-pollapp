@@ -23,3 +23,11 @@ export interface Survey {
   created_at: string;
   questions: Question[];
 }
+
+export interface SurveyPayload {
+  title: string;
+  description: string;
+  end_date: string;
+  category: string;
+  questions: { text: string; allow_multiple: boolean; answers: string[] }[];
+}

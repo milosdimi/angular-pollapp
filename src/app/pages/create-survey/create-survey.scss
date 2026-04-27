@@ -41,7 +41,7 @@
 
 .draft-badge {
   display: inline-block;
-  background: #ffcfa1;
+  background: var(--color-accent-hover);
   color: var(--color-text-dark);
   font-family: var(--font-body);
   font-size: 13px;
@@ -78,7 +78,6 @@
   }
 }
 
-/* Form area */
 .form-area {
   background: var(--color-bg-form-area);
   border-radius: 5px 80px 5px 5px;
@@ -91,7 +90,6 @@
   }
 }
 
-/* Top row */
 .top-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -179,7 +177,6 @@
   }
 }
 
-/* Delete button */
 .delete-btn {
   background: none;
   border: none;
@@ -208,7 +205,6 @@
   }
 }
 
-/* Category dropdown */
 .category-select {
   position: relative;
 }
@@ -273,8 +269,6 @@
   }
 }
 
-/* Questions */
-
 .questions-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -337,8 +331,8 @@
     }
 
     &:checked {
-      background: #ffb770;
-      border-color: #ffb770;
+      background: var(--color-accent);
+      border-color: var(--color-accent);
 
       &::after {
         content: '';
@@ -462,7 +456,6 @@
   }
 }
 
-/* Publish */
 .publish-error {
   font-family: var(--font-body);
   font-size: 13px;
@@ -475,7 +468,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px 32px;
-  background: #ffcfa1;
+  background: var(--color-accent-hover);
   color: var(--color-text-dark);
   font-family: var(--font-body);
   font-weight: 700;
@@ -496,7 +489,7 @@
   }
 
   &:hover {
-    background: #ffb770;
+    background: var(--color-accent);
   }
 
   &:hover &__icon {
@@ -521,7 +514,6 @@
     padding: 24px 20px;
     gap: 32px;
 
-    /* Draft links + X rechts auf einer Zeile, Titel darunter */
     &__header-left {
       position: relative;
     }
@@ -535,7 +527,6 @@
     }
   }
 
-  /* Cancel button: icon only, pinned top-right */
   .cancel-btn {
     position: absolute;
     top: 0;
@@ -556,12 +547,10 @@
     border-radius: 5px 40px 5px 5px;
   }
 
-  /* Top-row: 2 Spalten → 1 Spalte */
   .top-row {
     grid-template-columns: 1fr;
   }
 
-  /* End-date + Category untereinander */
   .bottom-row {
     flex-direction: column;
   }
@@ -570,13 +559,11 @@
     width: 100%;
   }
 
-  /* Questions: 2 Spalten → 1 Spalte */
   .questions-grid {
     grid-template-columns: 1fr;
     gap: 32px;
   }
 
-  /* "Add next question" zentriert */
   .add-question-cell {
     justify-content: center;
   }
@@ -587,7 +574,6 @@
     max-width: 280px;
   }
 
-  /* Publish-Button zentriert + etwas breiter */
   .publish-btn {
     width: 100%;
     max-width: 280px;
@@ -599,11 +585,10 @@
     }
 
     &:hover {
-      background: #ffcfa1;
+      background: var(--color-accent-hover);
     }
   }
 
-  /* Field groups: label + delete on same row, input below */
   .field-group {
     display: grid;
     grid-template-columns: 1fr 26px;
@@ -647,7 +632,6 @@
     }
   }
 
-  /* Answers: letter + delete on top row, input full-width below */
   .answer-row {
     flex-wrap: wrap;
     margin-bottom: 12px;
@@ -668,7 +652,6 @@
     }
   }
 
-  /* Add answer: hint above button */
   .add-answer-row {
     flex-direction: column;
     align-items: flex-start;
@@ -679,7 +662,6 @@
   }
 }
 
-/* Published overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -693,7 +675,7 @@
     width: 357px;
     height: 86px;
     border-radius: 5px 50px 5px 5px;
-    background: #ffcfa1;
+    background: var(--color-accent-hover);
     color: var(--color-text-dark);
     font-family: var(--font-display);
     font-weight: 400;

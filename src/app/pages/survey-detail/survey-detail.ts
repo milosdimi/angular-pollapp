@@ -100,8 +100,8 @@ export class SurveyDetail implements OnInit, OnDestroy {
       const surveyId = Number(this.route.snapshot.paramMap.get('id'));
       this.markVotedFor(surveyId);
       this.hasVoted.set(true);
-    } catch (err) {
-      console.error('Vote failed:', err);
+    } catch {
+      // vote failure is silent; the UI remains interactive so the user can retry
     } finally {
       this.isVoting.set(false);
     }
@@ -150,8 +150,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
     try {
       await this.supabase.deleteSurvey(this.survey()!.id);
       this.router.navigate(['/']);
-    } catch (err) {
-      console.error('Delete failed:', err);
+    } catch {
       this.isDeleting.set(false);
     }
   }

@@ -34,7 +34,7 @@
     align-items: center;
     gap: 10px;
     padding: 12px 16px;
-    background: #ffcfa1;
+    background: var(--color-accent-hover);
     color: var(--color-text-dark);
     font-family: var(--font-body);
     font-weight: 700;
@@ -54,7 +54,7 @@
     }
 
     &:hover {
-      background: #ffb770;
+      background: var(--color-accent);
 
       .hero__btn-icon {
         width: 24px;
@@ -155,7 +155,7 @@
     &__btn {
       width: 172px;
       height: 48px;
-      background: #ffb770;
+      background: var(--color-accent);
       font-family: var(--font-ui);
       font-size: 18px;
       justify-content: center;
@@ -169,7 +169,7 @@
       }
 
       &:hover {
-        background: #ffb770;
+        background: var(--color-accent);
 
         .hero__btn-icon {
           width: 24px;

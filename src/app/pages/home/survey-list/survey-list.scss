@@ -8,7 +8,6 @@
   }
 }
 
-/* Filter bar */
 .filter-bar {
   display: flex;
   justify-content: space-between;
@@ -25,7 +24,7 @@
     font-size: 16px;
     font-weight: 400;
     color: #35273a;
-    background: #ffcfa1;
+    background: var(--color-accent-hover);
     border: none;
     border-radius: 20px;
     padding: 2px 10px;
@@ -39,7 +38,7 @@
     }
 
     &--active {
-      background: #ffb770;
+      background: var(--color-accent);
     }
   }
 
@@ -64,7 +63,6 @@
   }
 }
 
-/* Sort dropdown */
 .sort {
   &__trigger {
     display: flex;
@@ -148,7 +146,6 @@
   }
 }
 
-/* Grid */
 .survey-list {
   &__grid {
     display: grid;

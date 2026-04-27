@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
-import { Answer, Question, Survey } from '../models/survey.interface';
+import { Answer, Question, Survey, SurveyPayload } from '../models/survey.interface';
 
 type RawAnswer = Answer & { order_index: number };
 type RawQuestion = Omit<Question, 'answers'> & { order_index: number; answers: RawAnswer[] };
@@ -40,14 +40,8 @@ export class SupabaseService {
   }
 
   /** Inserts a new survey with its questions and answers; returns the new survey ID. */
-  async createSurvey(payload: {
-    title: string;
-    description: string;
-    end_date: string;
-    category: string;
-    questions: { text: string; allow_multiple: boolean; answers: string[] }[];
-  }): Promise<number> {
-    const { data: survey, error: surveyError } = await this.client
+  async createSurvey(payload: SurveyPayload): Promise<number> {
+    const { data: survey, error } = await this.client
       .from('surveys')
       .insert({
         title: payload.title,
@@ -59,47 +53,14 @@ export class SupabaseService {
       .select('id')
       .single();
 
-    if (surveyError) throw surveyError;
-
-    for (let qi = 0; qi < payload.questions.length; qi++) {
-      const q = payload.questions[qi];
-      const { data: question, error: qError } = await this.client
-        .from('questions')
-        .insert({ survey_id: survey.id, text: q.text, allow_multiple: q.allow_multiple, order_index: qi })
-        .select('id')
-        .single();
-
-      if (qError) throw qError;
-
-      const answerRows = q.answers.map((text, ai) => ({
-        question_id: question.id,
-        text,
-        order_index: ai,
-      }));
-
-      const { error: aError } = await this.client.from('answers').insert(answerRows);
-      if (aError) throw aError;
-    }
-
+    if (error) throw error;
+    await this.insertQuestionsAndAnswers(survey.id, payload.questions);
     return survey.id;
   }
 
-  /** Deletes a survey and all its questions and answers by survey ID. */
-  async deleteSurvey(id: number): Promise<void> {
-    await this.deleteQuestionsAndAnswers(id);
-    const { error } = await this.client.from('surveys').delete().eq('id', id);
-    if (error) throw error;
-  }
-
   /** Replaces a survey's metadata and all its questions/answers in one atomic sequence. */
-  async updateSurvey(id: number, payload: {
-    title: string;
-    description: string;
-    end_date: string;
-    category: string;
-    questions: { text: string; allow_multiple: boolean; answers: string[] }[];
-  }): Promise<void> {
-    const { error: surveyError } = await this.client
+  async updateSurvey(id: number, payload: SurveyPayload): Promise<void> {
+    const { error } = await this.client
       .from('surveys')
       .update({
         title: payload.title,
@@ -109,23 +70,16 @@ export class SupabaseService {
       })
       .eq('id', id);
 
-    if (surveyError) throw surveyError;
-
+    if (error) throw error;
     await this.deleteQuestionsAndAnswers(id);
+    await this.insertQuestionsAndAnswers(id, payload.questions);
+  }
 
-    for (let qi = 0; qi < payload.questions.length; qi++) {
-      const q = payload.questions[qi];
-      const { data: question, error: qError } = await this.client
-        .from('questions')
-        .insert({ survey_id: id, text: q.text, allow_multiple: q.allow_multiple, order_index: qi })
-        .select('id').single();
-
-      if (qError) throw qError;
-
-      const answerRows = q.answers.map((text, ai) => ({ question_id: question.id, text, order_index: ai }));
-      const { error: aError } = await this.client.from('answers').insert(answerRows);
-      if (aError) throw aError;
-    }
+  /** Deletes a survey and all its questions and answers by survey ID. */
+  async deleteSurvey(id: number): Promise<void> {
+    await this.deleteQuestionsAndAnswers(id);
+    const { error } = await this.client.from('surveys').delete().eq('id', id);
+    if (error) throw error;
   }
 
   /** Increments the vote count for a single answer via an RPC call. */
@@ -145,6 +99,25 @@ export class SupabaseService {
   /** Removes the given realtime channel to prevent memory leaks. */
   unsubscribe(channel: ReturnType<typeof this.client.channel>): void {
     this.client.removeChannel(channel);
+  }
+
+  private async insertQuestionsAndAnswers(
+    surveyId: number,
+    questions: SurveyPayload['questions']
+  ): Promise<void> {
+    for (let qi = 0; qi < questions.length; qi++) {
+      const q = questions[qi];
+      const { data: question, error: qError } = await this.client
+        .from('questions')
+        .insert({ survey_id: surveyId, text: q.text, allow_multiple: q.allow_multiple, order_index: qi })
+        .select('id')
+        .single();
+
+      if (qError) throw qError;
+      const answerRows = q.answers.map((text, ai) => ({ question_id: question.id, text, order_index: ai }));
+      const { error: aError } = await this.client.from('answers').insert(answerRows);
+      if (aError) throw aError;
+    }
   }
 
   private async deleteQuestionsAndAnswers(surveyId: number): Promise<void> {

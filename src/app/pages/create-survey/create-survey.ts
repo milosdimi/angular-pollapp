@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { SupabaseService } from '../../services/supabase.service';
-import { Survey } from '../../models/survey.interface';
+import { Survey, SurveyPayload } from '../../models/survey.interface';
 import { Navbar } from '../../components/navbar/navbar';
 import { Footer } from '../../components/footer/footer';
 
@@ -100,7 +100,6 @@ export class CreateSurvey implements OnInit {
   showPublishedOverlay = signal(false);
   isPublishing = signal(false);
   publishError = signal<string | null>(null);
-  private newSurveyId: number | null = null;
 
   clearQuestion(questionIndex: number): void {
     const q = this.questions.at(questionIndex) as FormGroup;
@@ -165,12 +164,27 @@ export class CreateSurvey implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-
     this.isPublishing.set(true);
     this.publishError.set(null);
-    const v = this.form.value;
+    try {
+      await this.saveSurvey(this.buildPayload());
+      this.showPublishedOverlay.set(true);
+      setTimeout(() => this.closeOverlay(), 2000);
+    } catch (err: unknown) {
+      this.publishError.set(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      this.isPublishing.set(false);
+    }
+  }
 
-    const payload = {
+  closeOverlay(): void {
+    this.showPublishedOverlay.set(false);
+    this.router.navigate(['/']);
+  }
+
+  private buildPayload(): SurveyPayload {
+    const v = this.form.value;
+    return {
       title: v.title,
       description: v.description,
       end_date: v.end_date,
@@ -181,25 +195,13 @@ export class CreateSurvey implements OnInit {
         answers: (q.answers ?? []).filter((a): a is string => a !== null && a.trim() !== ''),
       })),
     };
-
-    try {
-      if (this.editId) {
-        await this.supabase.updateSurvey(this.editId, payload);
-      } else {
-        this.newSurveyId = await this.supabase.createSurvey(payload);
-      }
-      this.showPublishedOverlay.set(true);
-      setTimeout(() => this.closeOverlay(), 2000);
-    } catch (err: unknown) {
-      console.error('Publish failed:', err);
-      this.publishError.set(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
-    } finally {
-      this.isPublishing.set(false);
-    }
   }
 
-  closeOverlay(): void {
-    this.showPublishedOverlay.set(false);
-    this.router.navigate(['/']);
+  private async saveSurvey(payload: SurveyPayload): Promise<void> {
+    if (this.editId) {
+      await this.supabase.updateSurvey(this.editId, payload);
+    } else {
+      await this.supabase.createSurvey(payload);
+    }
   }
 }
