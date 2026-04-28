@@ -26,12 +26,13 @@ export class Home implements OnInit {
   isLoading = signal(true);
   loadError = signal<string | null>(null);
 
-  endingSoon = computed(() =>
-    this.surveys()
-      .filter(s => s.end_date)
+  endingSoon = computed(() => {
+    const now = new Date();
+    return this.surveys()
+      .filter(s => s.end_date && new Date(s.end_date) > now)
       .sort((a, b) => new Date(a.end_date!).getTime() - new Date(b.end_date!).getTime())
-      .slice(0, 3)
-  );
+      .slice(0, 3);
+  });
 
   async ngOnInit(): Promise<void> {
     this.titleService.setTitle('PollApp – Umfragen erstellen und teilen');
