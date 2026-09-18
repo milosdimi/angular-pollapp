@@ -13,4 +13,5 @@ jobs:
         run: |
           curl -sf -o /dev/null -w "HTTP %{http_code}\n" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            "https://uifnawnjrplpeyspzwao.supabase.co/rest/v1/"
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            "https://uifnawnjrplpeyspzwao.supabase.co/rest/v1/surveys?select=id&limit=1"
