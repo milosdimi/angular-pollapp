@@ -19,7 +19,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 })
 export class HighlightCard {
   survey = input.required<Survey>();
-  cardClick = output<number>();
+  cardClick = output<string>();
 
   categoryIcon(category: string): string {
     return CATEGORY_ICONS[category] ?? 'svgs/clipboard-text.svg';

@@ -2,11 +2,11 @@
 
 # 📊 PollApp
 
-**A modern survey & polling web application built with Angular & Supabase**
+**A modern survey & polling web application built with Angular & PocketBase**
 
 [![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Supabase](https://img.shields.io/badge/Supabase-2.x-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
+[![PocketBase](https://img.shields.io/badge/PocketBase-0.28-B8DBE4?style=for-the-badge&logo=pocketbase&logoColor=black)](https://pocketbase.io)
 [![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
@@ -20,7 +20,7 @@
 
 - 📋 **Browse surveys** — Active and past surveys with category filter & sorting
 - 🎯 **Vote on surveys** — Single or multiple choice answers per question
-- 📊 **Live results** — Real-time bar charts update as votes come in (Supabase Realtime)
+- 📊 **Live results** — Real-time bar charts update as votes come in (PocketBase Realtime)
 - ✏️ **Create & edit** — Full survey builder with questions, answers, end date and category
 - 🗑️ **Delete** — Remove your own surveys with confirmation dialog
 - 🔒 **No double voting** — LocalStorage prevents multiple votes per survey
@@ -42,9 +42,9 @@
 | **Framework** | [Angular 21](https://angular.dev) (standalone components, signals) |
 | **Language** | [TypeScript 5.9](https://www.typescriptlang.org) |
 | **Styling** | SCSS with CSS custom properties |
-| **Backend / DB** | [Supabase](https://supabase.com) (PostgreSQL) |
-| **Realtime** | Supabase Realtime (live vote updates) |
-| **Auth / Security** | Supabase Row Level Security |
+| **Backend / DB** | [PocketBase](https://pocketbase.io) (self-hosted, SQLite) |
+| **Realtime** | PocketBase Realtime / SSE (live vote updates) |
+| **API Rules** | Public PocketBase API rules (no login required) |
 | **Fonts** | Mulish · Nokora · Nerko One |
 | **Testing** | Vitest |
 | **Formatter** | Prettier |
@@ -75,7 +75,7 @@ src/
 │   │   ├── privacy/
 │   │   └── not-found/
 │   ├── services/
-│   │   └── supabase.service.ts
+│   │   └── poll.service.ts
 │   ├── models/
 │   │   └── survey.interface.ts
 │   ├── pipes/
@@ -93,16 +93,20 @@ src/
 
 ## 🗄️ Database Schema
 
-```sql
+PocketBase collections (IDs are 15-character strings):
+
+```
 surveys
-  id · title · description · category · status · end_date · created_at
+  id · title · description · category · status (published | draft | past) · end_date · created · updated
 
 questions
-  id · survey_id (FK) · text · allow_multiple · order_index
+  id · survey (→ surveys, cascade delete) · text · allow_multiple · order_index · created · updated
 
 answers
-  id · question_id (FK) · text · vote_count
+  id · question (→ questions, cascade delete) · text · vote_count · order_index · created · updated
 ```
+
+Votes are incremented atomically via `update(id, { 'vote_count+': 1 })`.
 
 ---
 
@@ -113,7 +117,7 @@ answers
 - Node.js ≥ 20
 - npm ≥ 11
 - Angular CLI 21 — `npm install -g @angular/cli`
-- A [Supabase](https://supabase.com) project
+- A running [PocketBase](https://pocketbase.io) instance with the collections above
 
 ### Installation
 
@@ -142,8 +146,7 @@ Create `src/environments/environment.ts` (excluded from git):
 ```typescript
 export const environment = {
   production: false,
-  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
-  supabaseKey: 'YOUR_ANON_PUBLIC_KEY',
+  pocketbaseUrl: 'https://YOUR_POCKETBASE_URL',
 };
 ```
 
@@ -152,8 +155,7 @@ Create `src/environments/environment.prod.ts` for production:
 ```typescript
 export const environment = {
   production: true,
-  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
-  supabaseKey: 'YOUR_ANON_PUBLIC_KEY',
+  pocketbaseUrl: 'https://YOUR_POCKETBASE_URL',
 };
 ```
 

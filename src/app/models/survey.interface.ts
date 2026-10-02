@@ -1,26 +1,26 @@
 export interface Answer {
-  id: number;
-  question_id: number;
+  id: string;
+  question: string;
   text: string;
   vote_count: number;
 }
 
 export interface Question {
-  id: number;
-  survey_id: number;
+  id: string;
+  survey: string;
   text: string;
   allow_multiple: boolean;
   answers: Answer[];
 }
 
 export interface Survey {
-  id: number;
+  id: string;
   title: string;
   description: string | null;
   category: string | null;
   end_date: string | null;
   status: 'published' | 'draft' | 'past';
-  created_at: string;
+  created: string;
   questions: Question[];
 }
 

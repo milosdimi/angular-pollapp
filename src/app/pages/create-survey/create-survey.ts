@@ -2,7 +2,7 @@ import { Component, inject, HostListener, signal, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { SupabaseService } from '../../services/supabase.service';
+import { PollService } from '../../services/poll.service';
 import { Survey, SurveyPayload } from '../../models/survey.interface';
 import { Navbar } from '../../components/navbar/navbar';
 import { Footer } from '../../components/footer/footer';
@@ -40,18 +40,18 @@ export class CreateSurvey implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
-  private supabase = inject(SupabaseService);
+  private pollService = inject(PollService);
   private titleService = inject(Title);
   private metaService = inject(Meta);
 
-  editId: number | null = null;
+  editId: string | null = null;
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.queryParamMap.get('id');
     if (id) {
-      this.editId = Number(id);
+      this.editId = id;
       this.titleService.setTitle('Umfrage bearbeiten – PollApp');
-      const survey = await this.supabase.getSurveyById(this.editId);
+      const survey = await this.pollService.getSurveyById(this.editId);
       this.patchForm(survey);
     } else {
       this.questions.push(this.createQuestion());
@@ -204,9 +204,9 @@ export class CreateSurvey implements OnInit {
 
   private async saveSurvey(payload: SurveyPayload): Promise<void> {
     if (this.editId) {
-      await this.supabase.updateSurvey(this.editId, payload);
+      await this.pollService.updateSurvey(this.editId, payload);
     } else {
-      await this.supabase.createSurvey(payload);
+      await this.pollService.createSurvey(payload);
     }
   }
 }

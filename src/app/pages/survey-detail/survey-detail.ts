@@ -4,7 +4,8 @@ import { TitleCasePipe } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { Navbar } from '../../components/navbar/navbar';
 import { Survey, Question, Answer } from '../../models/survey.interface';
-import { SupabaseService } from '../../services/supabase.service';
+import { UnsubscribeFunc } from 'pocketbase';
+import { PollService } from '../../services/poll.service';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormatDatePipe } from '../../pipes/format-date.pipe';
 import { Footer } from '../../components/footer/footer';
@@ -18,7 +19,7 @@ import { Footer } from '../../components/footer/footer';
 export class SurveyDetail implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private supabase = inject(SupabaseService);
+  private pollService = inject(PollService);
   private titleService = inject(Title);
   private metaService = inject(Meta);
 
@@ -32,8 +33,9 @@ export class SurveyDetail implements OnInit, OnDestroy {
   showDeleteConfirm = signal(false);
   isDeleting = signal(false);
 
-  private selections = signal<Map<number, Set<number>>>(new Map());
-  private channel: ReturnType<typeof this.supabase.subscribeToAnswers> | null = null;
+  private selections = signal<Map<string, Set<string>>>(new Map());
+  private unsubscribeFn: UnsubscribeFunc | null = null;
+  private destroyed = false;
 
   readonly LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -50,19 +52,27 @@ export class SurveyDetail implements OnInit, OnDestroy {
   });
 
   async ngOnInit(): Promise<void> {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id')!;
     if (this.hasVotedFor(id)) this.hasVoted.set(true);
     await this.loadSurvey(id);
-    this.channel = this.supabase.subscribeToAnswers(id, () => this.loadSurvey(id));
+    try {
+      const unsubscribeFn = await this.pollService.subscribeToAnswers(id, () => this.loadSurvey(id));
+      // The page may have been left while the subscription was still being set up.
+      if (this.destroyed) this.pollService.unsubscribe(unsubscribeFn);
+      else this.unsubscribeFn = unsubscribeFn;
+    } catch {
+      // Realtime is optional; the survey still works without live updates.
+    }
   }
 
   ngOnDestroy(): void {
-    if (this.channel) this.supabase.unsubscribe(this.channel);
+    this.destroyed = true;
+    if (this.unsubscribeFn) this.pollService.unsubscribe(this.unsubscribeFn);
   }
 
-  private async loadSurvey(id: number): Promise<void> {
+  private async loadSurvey(id: string): Promise<void> {
     try {
-      const data = await this.supabase.getSurveyById(id);
+      const data = await this.pollService.getSurveyById(id);
       this.survey.set(data);
       this.titleService.setTitle(`${data.title} – PollApp`);
       this.metaService.updateTag({ name: 'description', content: data.description ?? 'Nimm an dieser Umfrage teil und sieh die Ergebnisse in Echtzeit.' });
@@ -73,11 +83,11 @@ export class SurveyDetail implements OnInit, OnDestroy {
     }
   }
 
-  isSelected(questionId: number, answerId: number): boolean {
+  isSelected(questionId: string, answerId: string): boolean {
     return this.selections().get(questionId)?.has(answerId) ?? false;
   }
 
-  toggleAnswer(question: Question, answerId: number): void {
+  toggleAnswer(question: Question, answerId: string): void {
     if (this.hasVoted()) return;
     const map = new Map(this.selections());
     const set = new Set(map.get(question.id) ?? []);
@@ -98,8 +108,8 @@ export class SurveyDetail implements OnInit, OnDestroy {
     this.voteError.set(null);
     try {
       const allSelected = [...this.selections().values()].flatMap(s => [...s]);
-      await Promise.all(allSelected.map(id => this.supabase.vote(id)));
-      const surveyId = Number(this.route.snapshot.paramMap.get('id'));
+      await Promise.all(allSelected.map(id => this.pollService.vote(id)));
+      const surveyId = this.route.snapshot.paramMap.get('id')!;
       this.markVotedFor(surveyId);
       this.hasVoted.set(true);
     } catch {
@@ -109,13 +119,13 @@ export class SurveyDetail implements OnInit, OnDestroy {
     }
   }
 
-  private hasVotedFor(surveyId: number): boolean {
-    const voted = JSON.parse(localStorage.getItem('pollapp_voted') ?? '[]') as number[];
+  private hasVotedFor(surveyId: string): boolean {
+    const voted = JSON.parse(localStorage.getItem('pollapp_voted') ?? '[]') as string[];
     return voted.includes(surveyId);
   }
 
-  private markVotedFor(surveyId: number): void {
-    const voted = JSON.parse(localStorage.getItem('pollapp_voted') ?? '[]') as number[];
+  private markVotedFor(surveyId: string): void {
+    const voted = JSON.parse(localStorage.getItem('pollapp_voted') ?? '[]') as string[];
     if (!voted.includes(surveyId)) {
       localStorage.setItem('pollapp_voted', JSON.stringify([...voted, surveyId]));
     }
@@ -150,7 +160,7 @@ export class SurveyDetail implements OnInit, OnDestroy {
   async onDeleteConfirm(): Promise<void> {
     this.isDeleting.set(true);
     try {
-      await this.supabase.deleteSurvey(this.survey()!.id);
+      await this.pollService.deleteSurvey(this.survey()!.id);
       this.router.navigate(['/']);
     } catch {
       this.isDeleting.set(false);

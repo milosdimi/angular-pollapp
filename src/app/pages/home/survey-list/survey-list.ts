@@ -19,7 +19,7 @@ const CATEGORIES: string[] = [
 })
 export class SurveyList {
   surveys = input.required<Survey[]>();
-  cardClick = output<number>();
+  cardClick = output<string>();
 
   activeTab = signal<'active' | 'past'>('active');
   selectedCategory = signal<string | null>(null);

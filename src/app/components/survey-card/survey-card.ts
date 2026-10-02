@@ -19,7 +19,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 })
 export class SurveyCard {
   survey = input.required<Survey>();
-  cardClick = output<number>();
+  cardClick = output<string>();
 
   isPast = computed(() => {
     const end = this.survey().end_date;

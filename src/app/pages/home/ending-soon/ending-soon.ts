@@ -10,5 +10,5 @@ import { HighlightCard } from '../../../components/highlight-card/highlight-card
 })
 export class EndingSoon {
   surveys = input.required<Survey[]>();
-  cardClick = output<number>();
+  cardClick = output<string>();
 }

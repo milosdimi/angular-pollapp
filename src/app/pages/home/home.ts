@@ -7,7 +7,7 @@ import { EndingSoon } from './ending-soon/ending-soon';
 import { SurveyList } from './survey-list/survey-list';
 import { Footer } from '../../components/footer/footer';
 import { Survey } from '../../models/survey.interface';
-import { SupabaseService } from '../../services/supabase.service';
+import { PollService } from '../../services/poll.service';
 import { Spinner } from '../../components/spinner/spinner';
 
 @Component({
@@ -18,7 +18,7 @@ import { Spinner } from '../../components/spinner/spinner';
 })
 export class Home implements OnInit {
   private router = inject(Router);
-  private supabase = inject(SupabaseService);
+  private pollService = inject(PollService);
   private titleService = inject(Title);
   private metaService = inject(Meta);
 
@@ -38,7 +38,7 @@ export class Home implements OnInit {
     this.titleService.setTitle('PollApp – Umfragen erstellen und teilen');
     this.metaService.updateTag({ name: 'description', content: 'Erstelle, teile und werte Umfragen in Echtzeit aus.' });
     try {
-      const data = await this.supabase.getSurveys();
+      const data = await this.pollService.getSurveys();
       this.surveys.set(data);
     } catch (err: unknown) {
       this.loadError.set(err instanceof Error ? err.message : 'Could not load surveys.');
@@ -47,7 +47,7 @@ export class Home implements OnInit {
     }
   }
 
-  onCardClick(id: number): void {
+  onCardClick(id: string): void {
     this.router.navigate(['/survey', id]);
   }
 }
